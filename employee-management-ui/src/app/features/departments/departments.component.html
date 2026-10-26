@@ -1,0 +1,248 @@
+<div class="space-y-6">
+  <!-- Top Navigation & Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+    <div>
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Department Administration</h2>
+      <p class="text-xs text-slate-500 mt-0.5">Manage organizational business units, codes, and leadership assignments.</p>
+    </div>
+
+    <div>
+      <button
+        type="button"
+        (click)="openCreateModal()"
+        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        <span>Add Department</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Search & Filter Card -->
+  <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-center gap-3">
+    <div class="relative flex-1 w-full">
+      <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+        placeholder="Search departments by name or code..."
+        class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+      />
+    </div>
+
+    <div class="w-full md:w-52">
+      <select
+        [(ngModel)]="statusFilter"
+        (change)="onFilterChange()"
+        class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="ALL">All Statuses</option>
+        <option value="ACTIVE">Active Only</option>
+        <option value="INACTIVE">Inactive Only</option>
+      </select>
+    </div>
+
+    <button
+      type="button"
+      (click)="resetFilters()"
+      class="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors shrink-0"
+    >
+      Reset
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <app-loading-spinner
+    *ngIf="loading"
+    [loading]="true"
+    text="Loading departments..."
+  ></app-loading-spinner>
+
+  <!-- Error State with Retry -->
+  <div *ngIf="errorMessage && !loading" class="space-y-3">
+    <app-alert [message]="errorMessage" type="error"></app-alert>
+    <button
+      type="button"
+      (click)="fetchDepartments()"
+      class="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl"
+    >
+      Retry Fetching
+    </button>
+  </div>
+
+  <!-- Departments Table -->
+  <div *ngIf="!loading && !errorMessage" class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs border-collapse">
+        <thead>
+          <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+            <th class="p-3.5">Department Name</th>
+            <th class="p-3.5">Code</th>
+            <th class="p-3.5">Description</th>
+            <th class="p-3.5">Department Head</th>
+            <th class="p-3.5">Active Staff</th>
+            <th class="p-3.5">Status</th>
+            <th class="p-3.5 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-slate-700">
+          <tr *ngFor="let dept of departments" class="hover:bg-slate-50/70 transition-colors">
+            <td class="p-3.5 font-bold text-slate-900">{{ dept.name }}</td>
+            <td class="p-3.5 font-mono text-slate-600 font-semibold">{{ dept.code }}</td>
+            <td class="p-3.5 text-slate-500 max-w-xs truncate">{{ dept.description || 'N/A' }}</td>
+            <td class="p-3.5 text-slate-800 font-medium">{{ dept.managerName || 'Unassigned' }}</td>
+            <td class="p-3.5 font-bold text-blue-700">{{ dept.employeeCount }} staff</td>
+            <td class="p-3.5">
+              <app-status-badge [status]="dept.isActive ? 'ACTIVE' : 'INACTIVE'"></app-status-badge>
+            </td>
+            <td class="p-3.5 text-right space-x-2">
+              <button
+                type="button"
+                (click)="openEditModal(dept)"
+                class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-[11px] transition-colors"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                (click)="onToggleStatus(dept)"
+                [ngClass]="dept.isActive ? 'text-rose-600 hover:bg-rose-50' : 'text-emerald-600 hover:bg-emerald-50'"
+                class="px-2.5 py-1 rounded-lg border border-slate-200 font-bold text-[11px] transition-colors"
+              >
+                {{ dept.isActive ? 'Deactivate' : 'Activate' }}
+              </button>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr *ngIf="departments.length === 0">
+            <td colspan="7" class="p-10 text-center text-slate-400 text-xs">
+              No departments found matching search criteria.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Footer -->
+    <div class="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 bg-slate-50/50">
+      <span>
+        Page <strong class="text-slate-800">{{ currentPage + 1 }}</strong> of <strong class="text-slate-800">{{ totalPages || 1 }}</strong>
+        &bull; Total: <strong class="text-slate-800">{{ totalElements }}</strong>
+      </span>
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          [disabled]="currentPage === 0"
+          (click)="onPageChange(currentPage - 1)"
+          class="px-3.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium text-slate-700"
+        >
+          Previous
+        </button>
+        <button
+          type="button"
+          [disabled]="(currentPage + 1) >= totalPages"
+          (click)="onPageChange(currentPage + 1)"
+          class="px-3.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium text-slate-700"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create / Edit Department Modal -->
+  <div *ngIf="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs" (click)="showModal = false"></div>
+    <div class="relative bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl z-10 space-y-4 border border-slate-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-bold text-slate-900">
+          {{ isEditMode ? 'Edit Department' : 'Create New Department' }}
+        </h3>
+        <button type="button" (click)="showModal = false" class="text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <form [formGroup]="deptForm" (ngSubmit)="onSaveDepartment()" class="space-y-4 text-xs" novalidate>
+        <div>
+          <label for="dept-name" class="block font-bold text-slate-700 mb-1">Department Name <span class="text-rose-500">*</span></label>
+          <input
+            id="dept-name"
+            type="text"
+            formControlName="name"
+            placeholder="e.g. Information Security"
+            class="w-full px-3.5 py-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+          />
+          <div *ngIf="deptForm.get('name')?.invalid && (deptForm.get('name')?.touched || submitted)" class="text-[11px] text-rose-600 mt-1">
+            Department name is required.
+          </div>
+        </div>
+
+        <div>
+          <label for="dept-code" class="block font-bold text-slate-700 mb-1">Department Code <span class="text-rose-500">*</span></label>
+          <input
+            id="dept-code"
+            type="text"
+            formControlName="code"
+            placeholder="e.g. SEC"
+            class="w-full px-3.5 py-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors uppercase font-mono"
+          />
+          <div *ngIf="deptForm.get('code')?.invalid && (deptForm.get('code')?.touched || submitted)" class="text-[11px] text-rose-600 mt-1">
+            Department code is required (max 20 characters).
+          </div>
+        </div>
+
+        <div>
+          <label for="dept-manager" class="block font-bold text-slate-700 mb-1">Department Head / Manager</label>
+          <select
+            id="dept-manager"
+            formControlName="managerId"
+            class="w-full px-3.5 py-2.5 border rounded-xl border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+          >
+            <option [ngValue]="null">-- Unassigned --</option>
+            <option *ngFor="let mgr of managers" [value]="mgr.employeeId">
+              {{ mgr.fullName }} &bull; {{ mgr.designation }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="dept-desc" class="block font-bold text-slate-700 mb-1">Description</label>
+          <textarea
+            id="dept-desc"
+            rows="3"
+            formControlName="description"
+            placeholder="Department responsibilities and mission..."
+            class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+          ></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+          <button
+            type="button"
+            (click)="showModal = false"
+            class="px-4 py-2 border border-slate-300 rounded-xl text-slate-700 font-semibold hover:bg-slate-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="deptForm.invalid || isSaving"
+            class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            <span *ngIf="isSaving" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            <span>{{ isEditMode ? 'Update Department' : 'Create Department' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

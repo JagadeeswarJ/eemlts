@@ -1,0 +1,338 @@
+<div class="max-w-4xl mx-auto space-y-6">
+  <!-- Header with Back Button -->
+  <div class="flex items-center gap-3 pb-3 border-b border-slate-200">
+    <a
+      routerLink="/employees"
+      class="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+      title="Back to Employees"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+    </a>
+    <div>
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+        {{ isEditMode ? 'Edit Employee Record' : 'Onboard New Employee' }}
+      </h2>
+      <p class="text-xs text-slate-500 mt-0.5">
+        {{ isEditMode ? 'Update employment details, department, or manager assignment.' : 'Fill in personnel and contact information to create an employee profile.' }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Global Form Error Alert -->
+  <app-alert
+    *ngIf="error$ | async as error"
+    [message]="error"
+    type="error"
+  ></app-alert>
+
+  <!-- Department Lookup Warning / Retry Banner -->
+  <div
+    *ngIf="deptError$ | async as deptErr"
+    class="p-4 rounded-xl border border-amber-200 bg-amber-50 text-amber-900 flex items-center justify-between text-xs"
+  >
+    <div class="flex items-center gap-2">
+      <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+      </svg>
+      <span>Department lookup failed: {{ deptErr }}</span>
+    </div>
+    <button
+      type="button"
+      (click)="retryLoadDepartments()"
+      class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition-colors shrink-0"
+    >
+      Retry Lookup
+    </button>
+  </div>
+
+  <!-- Main Card Form -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-8" novalidate>
+      <!-- Section 1: Personal Details -->
+      <div>
+        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 pb-1.5 border-b border-slate-100 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+          1. Personal Information
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="firstName" class="block text-xs font-bold text-slate-700 mb-1">First Name <span class="text-rose-500">*</span></label>
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+              placeholder="e.g. Sarah"
+              [attr.aria-invalid]="form.get('firstName')?.invalid && (form.get('firstName')?.touched || submitted)"
+              aria-describedby="firstName-error"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+              [ngClass]="form.get('firstName')?.invalid && (form.get('firstName')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+            />
+            <app-validation-message
+              id="firstName-error"
+              [control]="form.get('firstName')"
+              fieldName="First name"
+              [submitted]="submitted"
+            ></app-validation-message>
+          </div>
+
+          <div>
+            <label for="lastName" class="block text-xs font-bold text-slate-700 mb-1">Last Name <span class="text-rose-500">*</span></label>
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              placeholder="e.g. Connor"
+              [attr.aria-invalid]="form.get('lastName')?.invalid && (form.get('lastName')?.touched || submitted)"
+              aria-describedby="lastName-error"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+              [ngClass]="form.get('lastName')?.invalid && (form.get('lastName')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+            />
+            <app-validation-message
+              id="lastName-error"
+              [control]="form.get('lastName')"
+              fieldName="Last name"
+              [submitted]="submitted"
+            ></app-validation-message>
+          </div>
+
+          <div>
+            <label for="email" class="block text-xs font-bold text-slate-700 mb-1">Work Email <span class="text-rose-500">*</span></label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="sarah.connor@company.com"
+              [readonly]="isEditMode"
+              [attr.aria-invalid]="form.get('email')?.invalid && (form.get('email')?.touched || submitted)"
+              aria-describedby="email-error"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+              [ngClass]="isEditMode ? 'bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed' : (form.get('email')?.invalid && (form.get('email')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300')"
+            />
+            <app-validation-message
+              id="email-error"
+              [control]="form.get('email')"
+              fieldName="Work email"
+              [submitted]="submitted"
+            ></app-validation-message>
+          </div>
+
+          <div>
+            <label for="phone" class="block text-xs font-bold text-slate-700 mb-1">Phone Number <span class="text-rose-500">*</span></label>
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              placeholder="+1-555-0199"
+              [attr.aria-invalid]="form.get('phone')?.invalid && (form.get('phone')?.touched || submitted)"
+              aria-describedby="phone-error"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+              [ngClass]="form.get('phone')?.invalid && (form.get('phone')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+            />
+            <app-validation-message
+              id="phone-error"
+              [control]="form.get('phone')"
+              fieldName="Phone number"
+              [submitted]="submitted"
+            ></app-validation-message>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Department & Employment Role -->
+      <div>
+        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 pb-1.5 border-b border-slate-100 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+          2. Organizational Assignment & Department
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Department Dropdown -->
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label for="departmentId" class="block text-xs font-bold text-slate-700">
+                Department <span class="text-rose-500">*</span>
+              </label>
+              <span *ngIf="deptLoading$ | async" class="text-[10px] text-blue-600 animate-pulse font-medium">
+                Loading departments...
+              </span>
+            </div>
+            <select
+              id="departmentId"
+              formControlName="departmentId"
+              [attr.aria-invalid]="form.get('departmentId')?.invalid && (form.get('departmentId')?.touched || submitted)"
+              aria-describedby="departmentId-error"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+              [ngClass]="form.get('departmentId')?.invalid && (form.get('departmentId')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+            >
+              <option value="">-- Choose a Department --</option>
+              <option *ngFor="let dept of departments$ | async" [value]="dept.departmentId">
+                {{ dept.name }} ({{ dept.code }})
+              </option>
+            </select>
+            <app-validation-message
+              id="departmentId-error"
+              [control]="form.get('departmentId')"
+              fieldName="Department"
+              [submitted]="submitted"
+            ></app-validation-message>
+          </div>
+
+          <!-- Designation / Title -->
+          <div>
+            <label for="designation" class="block text-xs font-bold text-slate-700 mb-1">Job Designation <span class="text-rose-500">*</span></label>
+            <input
+              id="designation"
+              type="text"
+              formControlName="designation"
+              placeholder="e.g. Senior Software Engineer"
+              [attr.aria-invalid]="form.get('designation')?.invalid && (form.get('designation')?.touched || submitted)"
+              aria-describedby="designation-error"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+              [ngClass]="form.get('designation')?.invalid && (form.get('designation')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+            />
+            <app-validation-message
+              id="designation-error"
+              [control]="form.get('designation')"
+              fieldName="Designation"
+              [submitted]="submitted"
+            ></app-validation-message>
+          </div>
+
+          <!-- Joining Date -->
+          <div>
+            <label for="joiningDate" class="block text-xs font-bold text-slate-700 mb-1">Joining Date <span class="text-rose-500">*</span></label>
+            <input
+              id="joiningDate"
+              type="date"
+              formControlName="joiningDate"
+              [readonly]="isEditMode"
+              [attr.aria-invalid]="form.get('joiningDate')?.invalid && (form.get('joiningDate')?.touched || submitted)"
+              aria-describedby="joiningDate-error"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+              [ngClass]="isEditMode ? 'bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed' : 'border-slate-300'"
+            />
+            <app-validation-message
+              id="joiningDate-error"
+              [control]="form.get('joiningDate')"
+              fieldName="Joining date"
+              [submitted]="submitted"
+            ></app-validation-message>
+          </div>
+
+          <!-- Reporting Manager Dropdown -->
+          <div>
+            <label for="managerId" class="block text-xs font-bold text-slate-700 mb-1">Reporting Manager (Optional)</label>
+            <select
+              id="managerId"
+              formControlName="managerId"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none border-slate-300 transition-colors"
+            >
+              <option [ngValue]="null">No Manager / Direct Leader</option>
+              <option *ngFor="let mgr of availableManagers$ | async" [value]="mgr.employeeId">
+                {{ mgr.fullName }} &bull; {{ mgr.designation }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Role Selection (Creation mode only) -->
+          <div *ngIf="!isEditMode">
+            <label for="role" class="block text-xs font-bold text-slate-700 mb-1">Security Role</label>
+            <select
+              id="role"
+              formControlName="role"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none border-slate-300"
+            >
+              <option value="EMPLOYEE">EMPLOYEE (Standard Self-Service)</option>
+              <option value="MANAGER">MANAGER (Team Approvals & Reports)</option>
+              <option value="HR">HR (Personnel Operations)</option>
+              <option value="ADMIN">ADMIN (System Administrator)</option>
+            </select>
+          </div>
+
+          <!-- Employment Status (Edit mode only) -->
+          <div *ngIf="isEditMode">
+            <label for="employmentStatus" class="block text-xs font-bold text-slate-700 mb-1">Employment Status</label>
+            <select
+              id="employmentStatus"
+              formControlName="employmentStatus"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none border-slate-300"
+            >
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="INACTIVE">INACTIVE</option>
+              <option value="ON_LEAVE">ON_LEAVE</option>
+              <option value="TERMINATED">TERMINATED</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Contact Details & Emergency -->
+      <div>
+        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 pb-1.5 border-b border-slate-100 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+          3. Address & Emergency Contact
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label for="address" class="block text-xs font-bold text-slate-700 mb-1">Residential Address <span class="text-rose-500">*</span></label>
+            <input
+              id="address"
+              type="text"
+              formControlName="address"
+              placeholder="e.g. 100 Main Street, Suite 400, Chicago, IL 60601"
+              [attr.aria-invalid]="form.get('address')?.invalid && (form.get('address')?.touched || submitted)"
+              aria-describedby="address-error"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+              [ngClass]="form.get('address')?.invalid && (form.get('address')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+            />
+            <app-validation-message
+              id="address-error"
+              [control]="form.get('address')"
+              fieldName="Residential address"
+              [submitted]="submitted"
+            ></app-validation-message>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="emergencyContact" class="block text-xs font-bold text-slate-700 mb-1">Emergency Contact Information <span class="text-rose-500">*</span></label>
+            <input
+              id="emergencyContact"
+              type="text"
+              formControlName="emergencyContact"
+              placeholder="e.g. Jane Doe (Spouse) - +1-555-0188"
+              [attr.aria-invalid]="form.get('emergencyContact')?.invalid && (form.get('emergencyContact')?.touched || submitted)"
+              aria-describedby="emergencyContact-error"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+              [ngClass]="form.get('emergencyContact')?.invalid && (form.get('emergencyContact')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+            />
+            <app-validation-message
+              id="emergencyContact-error"
+              [control]="form.get('emergencyContact')"
+              fieldName="Emergency contact"
+              [submitted]="submitted"
+            ></app-validation-message>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-end gap-3 pt-6 border-t border-slate-200">
+        <a
+          routerLink="/employees"
+          class="px-5 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+        >
+          Cancel
+        </a>
+        <button
+          type="submit"
+          [disabled]="form.invalid || (loading$ | async)"
+          class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+        >
+          <span *ngIf="loading$ | async" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          <span>{{ isEditMode ? 'Update Employee Record' : 'Save & Onboard Employee' }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

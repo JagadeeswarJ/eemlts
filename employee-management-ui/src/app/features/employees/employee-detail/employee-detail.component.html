@@ -1,0 +1,132 @@
+<div class="max-w-4xl mx-auto space-y-6">
+  <!-- Top Navigation & Actions -->
+  <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+    <div class="flex items-center gap-3">
+      <a
+        routerLink="/employees"
+        class="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+        title="Back to Employees"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+      </a>
+      <div>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Personnel Dossier</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Comprehensive employee employment and contact records.</p>
+      </div>
+    </div>
+
+    <div *ngIf="employee$ | async as emp">
+      <ng-container *ngIf="currentUser$ | async as user">
+        <a
+          *ngIf="user.role === 'ADMIN' || user.role === 'HR'"
+          [routerLink]="['/employees', emp.employeeId, 'edit']"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+          <span>Edit Profile</span>
+        </a>
+      </ng-container>
+    </div>
+  </div>
+
+  <app-loading-spinner
+    [loading]="(loading$ | async) || false"
+    text="Loading personnel dossier..."
+  ></app-loading-spinner>
+
+  <app-alert
+    *ngIf="error$ | async as error"
+    [message]="error"
+    type="error"
+  ></app-alert>
+
+  <!-- Dossier Card -->
+  <div *ngIf="employee$ | async as emp" class="space-y-6">
+    <!-- Header Banner Card -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-600 text-white font-black text-xl flex items-center justify-center shadow-md">
+          {{ emp.firstName[0] }}{{ emp.lastName[0] }}
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-slate-900 leading-tight">
+            {{ emp.fullName || (emp.firstName + ' ' + emp.lastName) }}
+          </h3>
+          <div class="flex flex-wrap items-center gap-2 mt-1 text-xs text-slate-500">
+            <span class="font-mono font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">{{ emp.employeeCode }}</span>
+            <span>&bull;</span>
+            <span class="font-medium text-slate-800">{{ emp.designation }}</span>
+            <span>&bull;</span>
+            <span>{{ emp.departmentName || 'Unassigned Department' }}</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <app-status-badge [status]="emp.employmentStatus"></app-status-badge>
+      </div>
+    </div>
+
+    <!-- Details Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Card 1: Employment Details -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
+        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider pb-2 border-b border-slate-100 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+          Employment Details
+        </h4>
+        <dl class="space-y-3 text-xs">
+          <div class="flex justify-between py-1 border-b border-slate-50">
+            <dt class="text-slate-500 font-medium">Department</dt>
+            <dd class="text-slate-800 font-bold">{{ emp.departmentName || 'N/A' }}</dd>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-50">
+            <dt class="text-slate-500 font-medium">Job Designation</dt>
+            <dd class="text-slate-800 font-bold">{{ emp.designation }}</dd>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-50">
+            <dt class="text-slate-500 font-medium">Reporting Manager</dt>
+            <dd class="text-slate-800 font-bold">{{ emp.managerName || 'Direct Executive' }}</dd>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-50">
+            <dt class="text-slate-500 font-medium">Joining Date</dt>
+            <dd class="text-slate-800 font-bold">{{ emp.joiningDate }}</dd>
+          </div>
+          <div class="flex justify-between py-1">
+            <dt class="text-slate-500 font-medium">Security Role</dt>
+            <dd class="text-blue-700 font-bold uppercase">{{ emp.role || 'EMPLOYEE' }}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Card 2: Contact Details -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
+        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider pb-2 border-b border-slate-100 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+          Contact & Residential Information
+        </h4>
+        <dl class="space-y-3 text-xs">
+          <div class="flex justify-between py-1 border-b border-slate-50">
+            <dt class="text-slate-500 font-medium">Corporate Email</dt>
+            <dd class="text-slate-800 font-mono">{{ emp.email }}</dd>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-50">
+            <dt class="text-slate-500 font-medium">Phone Number</dt>
+            <dd class="text-slate-800 font-medium">{{ emp.phone }}</dd>
+          </div>
+          <div class="py-1 border-b border-slate-50">
+            <dt class="text-slate-500 font-medium mb-1">Residential Address</dt>
+            <dd class="text-slate-800 leading-relaxed">{{ emp.address }}</dd>
+          </div>
+          <div class="py-1">
+            <dt class="text-slate-500 font-medium mb-1">Emergency Contact</dt>
+            <dd class="text-slate-800 font-semibold">{{ emp.emergencyContact }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

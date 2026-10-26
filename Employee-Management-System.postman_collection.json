@@ -1,0 +1,926 @@
+{
+  "info": {
+    "name": "Employee Management & Leave Tracking System",
+    "_postman_id": "emp-mgmt-leave-system-collection-2026",
+    "description": "Comprehensive API collection for Employee Management, Attendance, Leave Tracking, and Reporting Microservices.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data && jsonData.data.accessToken) {",
+                  "    pm.collectionVariables.set('authToken', jsonData.data.accessToken);",
+                  "    console.log('Stored auth token:', jsonData.data.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@company.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login (Employee - Alex Jones)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data && jsonData.data.accessToken) {",
+                  "    pm.collectionVariables.set('authToken', jsonData.data.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alex.jones@company.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Password123!\",\n  \"newPassword\": \"NewPassword2026!\",\n  \"confirmPassword\": \"NewPassword2026!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/change-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "change-password"]
+            }
+          }
+        },
+        {
+          "name": "Forgot Password (Simulation)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alex.jones@company.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "forgot-password"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Employee Management",
+      "item": [
+        {
+          "name": "List Employees (Filtered & Paged)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees?page=0&size=10&status=ACTIVE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" },
+                { "key": "status", "value": "ACTIVE" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Michael\",\n  \"lastName\": \"Brown\",\n  \"email\": \"michael.brown@company.com\",\n  \"phone\": \"+1-555-0199\",\n  \"departmentId\": 1,\n  \"designation\": \"DevOps Specialist\",\n  \"joiningDate\": \"2026-10-22\",\n  \"managerId\": 3,\n  \"address\": \"77 Innovation Way, San Jose, CA\",\n  \"emergencyContact\": \"+1-555-9988\",\n  \"role\": \"EMPLOYEE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees"]
+            }
+          }
+        },
+        {
+          "name": "Get Employee Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees", "4"]
+            }
+          }
+        },
+        {
+          "name": "Update Employee",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Alex\",\n  \"lastName\": \"Jones\",\n  \"phone\": \"+1-555-0104\",\n  \"departmentId\": 1,\n  \"designation\": \"Staff Software Engineer\",\n  \"managerId\": 3,\n  \"address\": \"789 Market Street, Apt 12B, San Francisco, CA\",\n  \"emergencyContact\": \"+1-555-9004 (Parent)\",\n  \"employmentStatus\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees", "4"]
+            }
+          }
+        },
+        {
+          "name": "Deactivate Employee",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees", "5"]
+            }
+          }
+        },
+        {
+          "name": "List Departments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/departments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "departments"]
+            }
+          }
+        },
+        {
+          "name": "List Potential Managers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/employees/managers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "employees", "managers"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Attendance Management",
+      "item": [
+        {
+          "name": "Daily Check In",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/check-in",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "check-in"]
+            }
+          }
+        },
+        {
+          "name": "Daily Check Out",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/check-out",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "check-out"]
+            }
+          }
+        },
+        {
+          "name": "Get Today Attendance Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/today",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "today"]
+            }
+          }
+        },
+        {
+          "name": "Get Attendance History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/history?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "history"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Daily Attendance by Date",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/daily?date=2026-10-21",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "daily"],
+              "query": [
+                { "key": "date", "value": "2026-10-21" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Monthly Attendance Matrix",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/monthly?year=2026&month=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "monthly"],
+              "query": [
+                { "key": "year", "value": "2026" },
+                { "key": "month", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Attendance Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/stats?year=2026&month=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "stats"],
+              "query": [
+                { "key": "year", "value": "2026" },
+                { "key": "month", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Request Attendance Correction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attendanceDate\": \"2026-10-20\",\n  \"proposedCheckInTime\": \"2026-10-20T09:00:00\",\n  \"proposedCheckOutTime\": \"2026-10-20T17:30:00\",\n  \"reason\": \"RFID card failed at gate; building security logged visitor pass.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/corrections",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "corrections"]
+            }
+          }
+        },
+        {
+          "name": "Get Attendance Audit Trail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/attendance/audit-logs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "attendance", "audit-logs"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Leave Management",
+      "item": [
+        {
+          "name": "Get Leave Types",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leaves/types",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leaves", "types"]
+            }
+          }
+        },
+        {
+          "name": "Get Leave Balances (2026)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leaves/balances?year=2026",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leaves", "balances"],
+              "query": [
+                { "key": "year", "value": "2026" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Apply for Leave",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leaveTypeId\": 1,\n  \"startDate\": \"2026-11-10\",\n  \"endDate\": \"2026-11-11\",\n  \"reason\": \"Family relocation and personal moving tasks.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leaves/apply",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leaves", "apply"]
+            }
+          }
+        },
+        {
+          "name": "Cancel Leave Request",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leaves/3/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leaves", "3", "cancel"]
+            }
+          }
+        },
+        {
+          "name": "Approve Leave (Manager/HR)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": \"Approved. Work coverage confirmed with engineering team.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leaves/3/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leaves", "3", "approve"]
+            }
+          }
+        },
+        {
+          "name": "Reject Leave (Manager/HR)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": \"Critical sprint milestone during this release week. Please reschedule.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leaves/4/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leaves", "4", "reject"]
+            }
+          }
+        },
+        {
+          "name": "Get Pending Approvals Queue",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leaves/pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leaves", "pending"]
+            }
+          }
+        },
+        {
+          "name": "Get Team Leave Calendar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/leaves/calendar?startDate=2026-10-01&endDate=2026-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "leaves", "calendar"],
+              "query": [
+                { "key": "startDate", "value": "2026-10-01" },
+                { "key": "endDate", "value": "2026-12-31" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reporting & Analytics",
+      "item": [
+        {
+          "name": "Get Employee Dashboard Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/employee-dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "employee-dashboard"]
+            }
+          }
+        },
+        {
+          "name": "Get Manager Dashboard Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/manager-dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "manager-dashboard"]
+            }
+          }
+        },
+        {
+          "name": "Get HR Intelligence Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/hr-dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "hr-dashboard"]
+            }
+          }
+        },
+        {
+          "name": "Get Department Reports",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/department-reports",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "department-reports"]
+            }
+          }
+        },
+        {
+          "name": "Get Attendance Reports (2026)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/attendance-reports?year=2026",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "attendance-reports"],
+              "query": [
+                { "key": "year", "value": "2026" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Leave Reports (2026)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/leave-reports?year=2026",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "leave-reports"],
+              "query": [
+                { "key": "year", "value": "2026" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Department Administration",
+      "item": [
+        {
+          "name": "Get Active Departments",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/departments", "host": ["{{baseUrl}}"], "path": ["api", "v1", "departments"] }
+          }
+        },
+        {
+          "name": "Get Departments Admin",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/departments/admin?page=0&size=10", "host": ["{{baseUrl}}"], "path": ["api", "v1", "departments", "admin"], "query": [{ "key": "page", "value": "0" }, { "key": "size", "value": "10" }] }
+          }
+        },
+        {
+          "name": "Create Department",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Cyber Security\",\n    \"code\": \"CYBER\",\n    \"description\": \"Security Operations Center\",\n    \"managerId\": 3\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/departments", "host": ["{{baseUrl}}"], "path": ["api", "v1", "departments"] }
+          }
+        },
+        {
+          "name": "Update Department",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Cyber Defense & SecOps\",\n    \"code\": \"CYBER\",\n    \"description\": \"Expanded SOC\",\n    \"managerId\": 3\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/departments/1", "host": ["{{baseUrl}}"], "path": ["api", "v1", "departments", "1"] }
+          }
+        },
+        {
+          "name": "Toggle Department Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n    \"isActive\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/departments/1/status", "host": ["{{baseUrl}}"], "path": ["api", "v1", "departments", "1", "status"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Leave Configuration & Allocations",
+      "item": [
+        {
+          "name": "Get Admin Leave Types",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/leaves/admin/types?page=0&size=10", "host": ["{{baseUrl}}"], "path": ["api", "v1", "leaves", "admin", "types"] }
+          }
+        },
+        {
+          "name": "Create Leave Type",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"code\": \"COMPENSATORY\",\n    \"name\": \"Compensatory Off\",\n    \"description\": \"Overtime compensation\",\n    \"annualQuota\": 5,\n    \"isCarryForward\": false\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/leaves/admin/types", "host": ["{{baseUrl}}"], "path": ["api", "v1", "leaves", "admin", "types"] }
+          }
+        },
+        {
+          "name": "Get Admin Employee Balances",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/leaves/admin/balances?year=2026&page=0&size=10", "host": ["{{baseUrl}}"], "path": ["api", "v1", "leaves", "admin", "balances"] }
+          }
+        },
+        {
+          "name": "Adjust Employee Allocation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"year\": 2026,\n    \"newTotal\": 15.0,\n    \"reason\": \"Annual performance merit quota award\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/leaves/admin/balances/4/1", "host": ["{{baseUrl}}"], "path": ["api", "v1", "leaves", "admin", "balances", "4", "1"] }
+          }
+        },
+        {
+          "name": "Get Allocation Adjustments History",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/leaves/admin/balance-adjustments?employeeId=4", "host": ["{{baseUrl}}"], "path": ["api", "v1", "leaves", "admin", "balance-adjustments"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Employee Self-Service",
+      "item": [
+        {
+          "name": "Update Self Profile Contact Info",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"phone\": \"+1-555-0199\",\n    \"address\": \"456 Elm St, Suite 2A\",\n    \"emergencyContact\": \"Spouse - +1-555-0188\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/employees/me/profile", "host": ["{{baseUrl}}"], "path": ["api", "v1", "employees", "me", "profile"] }
+          }
+        }
+      ]
+    }
+  ]
+}

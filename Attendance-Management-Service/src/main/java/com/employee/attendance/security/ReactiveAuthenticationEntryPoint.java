@@ -1,0 +1,25 @@
+package com.employee.attendance.security;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+@Component
+@RequiredArgsConstructor
+public class ReactiveAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {
+
+    private final SecurityErrorResponseWriter errorResponseWriter;
+
+    @Override
+    public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException ex) {
+        return errorResponseWriter.writeErrorResponse(
+                exchange,
+                HttpStatus.UNAUTHORIZED,
+                "Authentication required. Please log in to proceed."
+        );
+    }
+}

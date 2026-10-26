@@ -1,0 +1,152 @@
+<div class="space-y-6">
+  <!-- Top Header & Tabs -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+    <div>
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Organization Analytics & Reports</h2>
+      <p class="text-xs text-slate-500 mt-0.5">Comprehensive audit reports for HR, department managers, and executives.</p>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl self-start border border-slate-200">
+      <button
+        type="button"
+        (click)="activeTab = 'departments'"
+        [ngClass]="activeTab === 'departments' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'"
+        class="px-3 py-1.5 text-xs rounded-lg transition-all"
+      >
+        Departments
+      </button>
+      <button
+        type="button"
+        (click)="activeTab = 'attendance'"
+        [ngClass]="activeTab === 'attendance' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'"
+        class="px-3 py-1.5 text-xs rounded-lg transition-all"
+      >
+        Attendance Trends
+      </button>
+      <button
+        type="button"
+        (click)="activeTab = 'leaves'"
+        [ngClass]="activeTab === 'leaves' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'"
+        class="px-3 py-1.5 text-xs rounded-lg transition-all"
+      >
+        Leave Utilization
+      </button>
+    </div>
+  </div>
+
+  <app-loading-spinner
+    *ngIf="loading$ | async"
+    [loading]="true"
+    text="Compiling report data..."
+  ></app-loading-spinner>
+
+  <!-- TAB 1: DEPARTMENT REPORTS -->
+  <div *ngIf="activeTab === 'departments'" class="space-y-4">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+      <div class="p-4 border-b border-slate-200">
+        <h3 class="text-sm font-bold text-slate-800">Department Workforce & Daily Attendance Breakdown</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+              <th class="p-3.5">Department</th>
+              <th class="p-3.5">Code</th>
+              <th class="p-3.5">Department Head</th>
+              <th class="p-3.5">Staff Count</th>
+              <th class="p-3.5">Present Today</th>
+              <th class="p-3.5">Absent Today</th>
+              <th class="p-3.5">Attendance Rate</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-700">
+            <tr *ngFor="let dept of departments$ | async" class="hover:bg-slate-50/70 transition-colors">
+              <td class="p-3.5 font-bold text-slate-900">{{ dept.name }}</td>
+              <td class="p-3.5 font-mono text-slate-600">{{ dept.code }}</td>
+              <td class="p-3.5 font-medium text-slate-800">{{ dept.managerName || 'Direct Executive' }}</td>
+              <td class="p-3.5 font-bold text-slate-800">{{ dept.totalEmployees }}</td>
+              <td class="p-3.5 font-bold text-emerald-600">{{ dept.presentToday }}</td>
+              <td class="p-3.5 font-bold text-rose-600">{{ dept.absentToday }}</td>
+              <td class="p-3.5 font-bold text-blue-700">{{ dept.attendanceRate }}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: ATTENDANCE TRENDS -->
+  <div *ngIf="activeTab === 'attendance'" class="space-y-4">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+      <div class="p-4 border-b border-slate-200">
+        <h3 class="text-sm font-bold text-slate-800">Monthly Organization Working Hours & Compliance</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+              <th class="p-3.5">Period (Month)</th>
+              <th class="p-3.5">Year</th>
+              <th class="p-3.5">Total Shifts</th>
+              <th class="p-3.5">Full Shifts</th>
+              <th class="p-3.5">Half Days</th>
+              <th class="p-3.5">Total Hours Logged</th>
+              <th class="p-3.5">Avg Daily Hours</th>
+              <th class="p-3.5">Overall Compliance</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-700">
+            <tr *ngFor="let report of attendance$ | async" class="hover:bg-slate-50/70 transition-colors">
+              <td class="p-3.5 font-bold text-slate-900">{{ report.month }}</td>
+              <td class="p-3.5 text-slate-500 font-mono">{{ report.year }}</td>
+              <td class="p-3.5 font-bold text-slate-800">{{ report.totalRecords }}</td>
+              <td class="p-3.5 text-emerald-600 font-medium">{{ report.presentDays }}</td>
+              <td class="p-3.5 text-amber-600 font-medium">{{ report.halfDays }}</td>
+              <td class="p-3.5 font-bold text-indigo-700 font-mono">{{ report.totalHours }} hrs</td>
+              <td class="p-3.5 text-slate-700 font-medium">{{ report.averageHours }} hrs</td>
+              <td class="p-3.5 font-bold text-blue-600">{{ report.overallPercentage }}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: LEAVE UTILIZATION -->
+  <div *ngIf="activeTab === 'leaves'" class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div *ngFor="let item of leaves$ | async" class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
+        <div class="flex items-start justify-between">
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ item.leaveTypeCode }}</span>
+            <h4 class="text-base font-bold text-slate-900 mt-0.5">{{ item.leaveTypeName }}</h4>
+          </div>
+          <div class="text-right">
+            <span class="text-2xl font-black text-indigo-600">{{ item.utilizationRate }}%</span>
+            <span class="text-[10px] text-slate-400 block uppercase font-medium">utilization</span>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-xs pt-3 border-t border-slate-100">
+          <div class="flex justify-between">
+            <span class="text-slate-500">Total Allocated Quota:</span>
+            <span class="font-bold text-slate-800">{{ item.totalAllocatedDays }} days</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Total Days Consumed:</span>
+            <span class="font-bold text-emerald-600">{{ item.totalUsedDays }} days</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Total Pending Review:</span>
+            <span class="font-bold text-amber-600">{{ item.totalPendingDays }} days</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Remaining Balance:</span>
+            <span class="font-bold text-blue-600">{{ item.totalAvailableDays }} days</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

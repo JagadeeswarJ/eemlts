@@ -1,0 +1,167 @@
+<div class="space-y-6">
+  <!-- Top Navigation & Header -->
+  <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+    <div class="flex items-center gap-3">
+      <a
+        routerLink="/attendance"
+        class="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+        title="Back to Attendance Center"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+      </a>
+      <div>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Attendance Corrections & Audit Trail</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Request manual biometric adjustments and review audit logs.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Request Correction Form Card -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 h-fit">
+      <h3 class="text-sm font-bold text-slate-900 mb-1">Request Attendance Adjustment</h3>
+      <p class="text-xs text-slate-500 mb-4">Forgot to swipe or technical issue? Submit an adjustment request.</p>
+
+      <form [formGroup]="correctionForm" (ngSubmit)="onRequestCorrection()" class="space-y-3.5 text-xs" novalidate>
+        <div>
+          <label for="attendanceDate" class="block font-bold text-slate-700 mb-1">Attendance Date <span class="text-rose-500">*</span></label>
+          <input
+            id="attendanceDate"
+            type="date"
+            formControlName="attendanceDate"
+            [attr.aria-invalid]="correctionForm.get('attendanceDate')?.invalid && (correctionForm.get('attendanceDate')?.touched || submitted)"
+            aria-describedby="attendanceDate-error"
+            class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            [ngClass]="correctionForm.get('attendanceDate')?.invalid && (correctionForm.get('attendanceDate')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+          />
+          <app-validation-message
+            id="attendanceDate-error"
+            [control]="correctionForm.get('attendanceDate')"
+            fieldName="Attendance date"
+            [submitted]="submitted"
+          ></app-validation-message>
+        </div>
+
+        <div>
+          <label for="proposedCheckInTime" class="block font-bold text-slate-700 mb-1">Proposed Check-In Time <span class="text-rose-500">*</span></label>
+          <input
+            id="proposedCheckInTime"
+            type="datetime-local"
+            formControlName="proposedCheckInTime"
+            [attr.aria-invalid]="correctionForm.get('proposedCheckInTime')?.invalid && (correctionForm.get('proposedCheckInTime')?.touched || submitted)"
+            aria-describedby="proposedCheckInTime-error"
+            class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            [ngClass]="correctionForm.get('proposedCheckInTime')?.invalid && (correctionForm.get('proposedCheckInTime')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+          />
+          <app-validation-message
+            id="proposedCheckInTime-error"
+            [control]="correctionForm.get('proposedCheckInTime')"
+            fieldName="Proposed check-in time"
+            [submitted]="submitted"
+          ></app-validation-message>
+        </div>
+
+        <div>
+          <label for="proposedCheckOutTime" class="block font-bold text-slate-700 mb-1">Proposed Check-Out Time</label>
+          <input
+            id="proposedCheckOutTime"
+            type="datetime-local"
+            formControlName="proposedCheckOutTime"
+            [attr.aria-invalid]="correctionForm.get('proposedCheckOutTime')?.invalid && (correctionForm.get('proposedCheckOutTime')?.touched || submitted)"
+            aria-describedby="proposedCheckOutTime-error"
+            class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            [ngClass]="correctionForm.get('proposedCheckOutTime')?.invalid && (correctionForm.get('proposedCheckOutTime')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+          />
+          <app-validation-message
+            id="proposedCheckOutTime-error"
+            [control]="correctionForm.get('proposedCheckOutTime')"
+            fieldName="Proposed check-out time"
+            [submitted]="submitted"
+          ></app-validation-message>
+        </div>
+
+        <div>
+          <label for="reason" class="block font-bold text-slate-700 mb-1">Reason for Adjustment <span class="text-rose-500">*</span></label>
+          <textarea
+            id="reason"
+            rows="3"
+            formControlName="reason"
+            placeholder="Explain the discrepancy..."
+            [attr.aria-invalid]="correctionForm.get('reason')?.invalid && (correctionForm.get('reason')?.touched || submitted)"
+            aria-describedby="reason-error"
+            class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            [ngClass]="correctionForm.get('reason')?.invalid && (correctionForm.get('reason')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+          ></textarea>
+          <app-validation-message
+            id="reason-error"
+            [control]="correctionForm.get('reason')"
+            fieldName="Reason for adjustment"
+            [submitted]="submitted"
+          ></app-validation-message>
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="correctionForm.invalid || (loading$ | async)"
+          class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-xs"
+        >
+          Submit Adjustment Request
+        </button>
+      </form>
+    </div>
+
+    <!-- Audit Trail & Pending Corrections List -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 lg:col-span-2 overflow-hidden">
+      <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
+        <h3 class="text-sm font-bold text-slate-900">Attendance Audit Trail & Decisions</h3>
+        <span class="text-xs text-slate-400">Chronological history</span>
+      </div>
+
+      <app-loading-spinner *ngIf="loading$ | async" [loading]="true" text="Loading audit trail..."></app-loading-spinner>
+
+      <div *ngIf="!(loading$ | async)" class="space-y-3">
+        <div *ngIf="((auditLogs$ | async)?.length || 0) === 0" class="p-8 text-center text-xs text-slate-400">
+          No audit logs recorded yet.
+        </div>
+
+        <div *ngFor="let log of auditLogs$ | async" class="p-4 bg-slate-50 border border-slate-200/80 rounded-xl text-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-slate-900">{{ log.employeeName }}</span>
+              <span class="text-slate-400">&bull;</span>
+              <span class="font-mono text-slate-600 font-semibold">{{ log.action }}</span>
+            </div>
+            <span class="text-[10px] text-slate-400 font-medium">{{ log.createdAt | date:'medium' }}</span>
+          </div>
+
+          <p class="text-slate-600 text-xs">{{ log.reason }}</p>
+
+          <div class="flex items-center justify-between pt-2 border-t border-slate-200/60 text-[11px] text-slate-500">
+            <span>Performed By: <strong class="text-slate-700">{{ log.performedBy }}</strong></span>
+
+            <ng-container *ngIf="currentUser$ | async as user">
+              <div *ngIf="(user.role === 'ADMIN' || user.role === 'HR' || user.role === 'MANAGER') && log.action === 'CORRECTION_REQUEST'" class="space-x-1.5">
+                <button
+                  type="button"
+                  (click)="onApprove(log.auditId)"
+                  class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-[10px] transition-colors"
+                >
+                  Approve Correction
+                </button>
+                <button
+                  type="button"
+                  (click)="onReject(log.auditId)"
+                  class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-bold text-[10px] transition-colors"
+                >
+                  Reject
+                </button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

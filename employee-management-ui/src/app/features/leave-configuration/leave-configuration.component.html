@@ -1,0 +1,251 @@
+<div class="space-y-6">
+  <!-- Top Navigation & Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+    <div>
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Leave-Type Configuration</h2>
+      <p class="text-xs text-slate-500 mt-0.5">Configure company leave policies, yearly entitlement quotas, and carry-forward rules.</p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a
+        routerLink="/leave-configuration/allocations"
+        class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors shadow-2xs"
+      >
+        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+        </svg>
+        <span>Employee Allocations</span>
+      </a>
+
+      <button
+        type="button"
+        (click)="openCreateModal()"
+        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        <span>Add Leave Type</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Search & Filter Card -->
+  <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-center gap-3">
+    <div class="relative flex-1 w-full">
+      <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+        placeholder="Search leave types by name or policy code..."
+        class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+      />
+    </div>
+
+    <div class="w-full md:w-52">
+      <select
+        [(ngModel)]="statusFilter"
+        (change)="onFilterChange()"
+        class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="ALL">All Statuses</option>
+        <option value="ACTIVE">Active Policies Only</option>
+        <option value="INACTIVE">Archived Policies Only</option>
+      </select>
+    </div>
+
+    <button
+      type="button"
+      (click)="resetFilters()"
+      class="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors shrink-0"
+    >
+      Reset
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <app-loading-spinner
+    *ngIf="loading"
+    [loading]="true"
+    text="Loading leave policy configurations..."
+  ></app-loading-spinner>
+
+  <!-- Error State with Retry -->
+  <div *ngIf="errorMessage && !loading" class="space-y-3">
+    <app-alert [message]="errorMessage" type="error"></app-alert>
+    <button
+      type="button"
+      (click)="fetchLeaveTypes()"
+      class="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl"
+    >
+      Retry Fetching
+    </button>
+  </div>
+
+  <!-- Leave Types Table -->
+  <div *ngIf="!loading && !errorMessage" class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs border-collapse">
+        <thead>
+          <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+            <th class="p-3.5">Policy Code</th>
+            <th class="p-3.5">Leave Name</th>
+            <th class="p-3.5">Description</th>
+            <th class="p-3.5">Annual Quota</th>
+            <th class="p-3.5">Carry Forward</th>
+            <th class="p-3.5">Policy Status</th>
+            <th class="p-3.5 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-slate-700">
+          <tr *ngFor="let lt of leaveTypes" class="hover:bg-slate-50/70 transition-colors">
+            <td class="p-3.5 font-mono text-slate-800 font-bold">{{ lt.code }}</td>
+            <td class="p-3.5 font-bold text-slate-900">{{ lt.name }}</td>
+            <td class="p-3.5 text-slate-500 max-w-xs truncate">{{ lt.description || 'N/A' }}</td>
+            <td class="p-3.5 font-extrabold text-blue-700">{{ lt.annualQuota }} days / yr</td>
+            <td class="p-3.5">
+              <span
+                [ngClass]="lt.isCarryForward ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-50 text-slate-600 border-slate-200'"
+                class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border"
+              >
+                {{ lt.isCarryForward ? 'Supported' : 'No' }}
+              </span>
+            </td>
+            <td class="p-3.5">
+              <app-status-badge [status]="lt.isActive ? 'ACTIVE' : 'INACTIVE'"></app-status-badge>
+            </td>
+            <td class="p-3.5 text-right space-x-2">
+              <button
+                type="button"
+                (click)="openEditModal(lt)"
+                class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-[11px] transition-colors"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                (click)="onToggleStatus(lt)"
+                [ngClass]="lt.isActive ? 'text-rose-600 hover:bg-rose-50' : 'text-emerald-600 hover:bg-emerald-50'"
+                class="px-2.5 py-1 rounded-lg border border-slate-200 font-bold text-[11px] transition-colors"
+              >
+                {{ lt.isActive ? 'Deactivate' : 'Activate' }}
+              </button>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr *ngIf="leaveTypes.length === 0">
+            <td colspan="7" class="p-10 text-center text-slate-400 text-xs">
+              No leave policies found matching filter criteria.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Create / Edit Modal -->
+  <div *ngIf="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs" (click)="showModal = false"></div>
+    <div class="relative bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl z-10 space-y-4 border border-slate-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-bold text-slate-900">
+          {{ isEditMode ? 'Edit Leave Type' : 'Configure New Leave Type' }}
+        </h3>
+        <button type="button" (click)="showModal = false" class="text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <form [formGroup]="typeForm" (ngSubmit)="onSaveType()" class="space-y-4 text-xs" novalidate>
+        <div *ngIf="!isEditMode">
+          <label for="type-code" class="block font-bold text-slate-700 mb-1">Policy Code <span class="text-rose-500">*</span></label>
+          <select
+            id="type-code"
+            formControlName="code"
+            class="w-full px-3.5 py-2.5 border rounded-xl border-slate-300 bg-white font-mono uppercase focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+          >
+            <option value="CASUAL">CASUAL</option>
+            <option value="SICK">SICK</option>
+            <option value="EARNED">EARNED</option>
+            <option value="COMPENSATORY">COMPENSATORY</option>
+            <option value="BEREAVEMENT">BEREAVEMENT</option>
+            <option value="UNPAID">UNPAID</option>
+            <option value="MATERNITY">MATERNITY</option>
+            <option value="PATERNITY">PATERNITY</option>
+            <option value="SPECIAL">SPECIAL</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="type-name" class="block font-bold text-slate-700 mb-1">Display Name <span class="text-rose-500">*</span></label>
+          <input
+            id="type-name"
+            type="text"
+            formControlName="name"
+            placeholder="e.g. Compensatory Off"
+            class="w-full px-3.5 py-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+          />
+        </div>
+
+        <div>
+          <label for="type-quota" class="block font-bold text-slate-700 mb-1">Annual Quota (Days) <span class="text-rose-500">*</span></label>
+          <input
+            id="type-quota"
+            type="number"
+            min="0"
+            formControlName="annualQuota"
+            placeholder="e.g. 12"
+            class="w-full px-3.5 py-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+          />
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input
+            id="type-carry"
+            type="checkbox"
+            formControlName="isCarryForward"
+            class="rounded-sm border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
+          />
+          <label for="type-carry" class="font-bold text-slate-700 cursor-pointer">
+            Support Unused Leave Carry-Forward to Next Calendar Year
+          </label>
+        </div>
+
+        <div>
+          <label for="type-desc" class="block font-bold text-slate-700 mb-1">Policy Description</label>
+          <textarea
+            id="type-desc"
+            rows="3"
+            formControlName="description"
+            placeholder="Policy eligibility, medical requirements, or advance notice period..."
+            class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+          ></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+          <button
+            type="button"
+            (click)="showModal = false"
+            class="px-4 py-2 border border-slate-300 rounded-xl text-slate-700 font-semibold hover:bg-slate-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="typeForm.invalid || isSaving"
+            class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            <span *ngIf="isSaving" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            <span>{{ isEditMode ? 'Update Policy' : 'Save Leave Policy' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,169 @@
+<div class="max-w-5xl mx-auto space-y-6">
+  <div class="pb-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div>
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">My Profile & Security Settings</h2>
+      <p class="text-xs text-slate-500 mt-0.5">Manage your personal contact details and account security credentials.</p>
+    </div>
+    <div class="px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-xl text-[11px] text-blue-800 flex items-center gap-1.5">
+      <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span>Employment details are provisioned by HR and cannot be modified directly.</span>
+    </div>
+  </div>
+
+  <app-alert
+    *ngIf="alertMessage"
+    [message]="alertMessage"
+    [type]="alertType"
+    (dismiss)="alertMessage = null"
+  ></app-alert>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Left Column: Identity & Read-Only Employment Details -->
+    <div class="lg:col-span-5 space-y-6">
+      <!-- Avatar Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 text-center space-y-4">
+        <ng-container *ngIf="currentUser$ | async as user">
+          <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-600 text-white font-black text-2xl flex items-center justify-center mx-auto shadow-md">
+            {{ user.firstName ? (user.firstName[0] + user.lastName[0]) : 'WP' }}
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900">{{ user.fullName || user.email }}</h3>
+            <p class="text-xs text-slate-500 font-medium">{{ user.designation }}</p>
+            <span class="inline-block mt-2 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-blue-50 text-blue-700 border border-blue-200">
+              {{ user.role }}
+            </span>
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 text-left text-xs space-y-3">
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span class="text-slate-400 font-semibold uppercase text-[10px]">Department</span>
+              <span class="font-bold text-slate-800">{{ user.departmentName || 'General' }}</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span class="text-slate-400 font-semibold uppercase text-[10px]">Employee Code</span>
+              <span class="font-mono text-slate-700 font-bold">{{ user.employeeCode }}</span>
+            </div>
+            <div class="flex justify-between py-1">
+              <span class="text-slate-400 font-semibold uppercase text-[10px]">Work Email</span>
+              <span class="text-slate-700 font-mono">{{ user.email }}</span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Right Column: Editable Personal Contacts & Password Change -->
+    <div class="lg:col-span-7 space-y-6">
+      <!-- Section 1: Personal Contact Info Form -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
+        <div class="border-b border-slate-100 pb-2">
+          <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Personal Contact Information</h4>
+          <p class="text-[11px] text-slate-400">Keep your telephone, residence address, and emergency contact up to date.</p>
+        </div>
+
+        <form [formGroup]="contactForm" (ngSubmit)="onSaveContactInfo()" class="space-y-4 text-xs">
+          <div>
+            <label for="contact-phone" class="block font-bold text-slate-700 mb-1">Phone Number <span class="text-rose-500">*</span></label>
+            <input
+              id="contact-phone"
+              type="tel"
+              formControlName="phone"
+              placeholder="+1-555-0199"
+              class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            />
+          </div>
+
+          <div>
+            <label for="contact-address" class="block font-bold text-slate-700 mb-1">Residential Address <span class="text-rose-500">*</span></label>
+            <input
+              id="contact-address"
+              type="text"
+              formControlName="address"
+              placeholder="e.g. 100 Main St, Chicago, IL"
+              class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            />
+          </div>
+
+          <div>
+            <label for="contact-emergency" class="block font-bold text-slate-700 mb-1">Emergency Contact Details <span class="text-rose-500">*</span></label>
+            <input
+              id="contact-emergency"
+              type="text"
+              formControlName="emergencyContact"
+              placeholder="e.g. Spouse - Jane Doe (+1-555-0188)"
+              class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            />
+          </div>
+
+          <div class="pt-2 text-right">
+            <button
+              type="submit"
+              [disabled]="contactForm.invalid || isSavingContact"
+              class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 ml-auto"
+            >
+              <span *ngIf="isSavingContact" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              <span>Save Contact Details</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Section 2: Password Change Form -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
+        <div class="border-b border-slate-100 pb-2">
+          <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Account Password</h4>
+          <p class="text-[11px] text-slate-400">Update your security credential. Must be at least 8 characters long.</p>
+        </div>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="space-y-4 text-xs">
+          <div>
+            <label for="currentPassword" class="block font-bold text-slate-700 mb-1">Current Password <span class="text-rose-500">*</span></label>
+            <input
+              id="currentPassword"
+              type="password"
+              formControlName="currentPassword"
+              placeholder="••••••••••••"
+              class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="newPassword" class="block font-bold text-slate-700 mb-1">New Password <span class="text-rose-500">*</span></label>
+              <input
+                id="newPassword"
+                type="password"
+                formControlName="newPassword"
+                placeholder="••••••••••••"
+                class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+              />
+            </div>
+            <div>
+              <label for="confirmPassword" class="block font-bold text-slate-700 mb-1">Confirm New Password <span class="text-rose-500">*</span></label>
+              <input
+                id="confirmPassword"
+                type="password"
+                formControlName="confirmPassword"
+                placeholder="••••••••••••"
+                class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+              />
+            </div>
+          </div>
+
+          <div class="pt-2 text-right">
+            <button
+              type="submit"
+              [disabled]="passwordForm.invalid || isSubmitting"
+              class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs shadow-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 ml-auto"
+            >
+              <span *ngIf="isSubmitting" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              <span>Update Password</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

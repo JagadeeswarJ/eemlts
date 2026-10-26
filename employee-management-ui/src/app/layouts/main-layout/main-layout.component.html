@@ -1,0 +1,29 @@
+<div class="h-screen w-screen overflow-hidden flex bg-slate-50">
+  <!-- Desktop Fixed Sidebar -->
+  <div class="hidden lg:flex shrink-0 h-full">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Mobile Drawer Overlay -->
+  <div *ngIf="sidebarOpen" class="fixed inset-0 z-50 lg:hidden flex">
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs" (click)="sidebarOpen = false"></div>
+    <div class="relative flex-1 flex flex-col max-w-xs w-full bg-slate-900 z-50 h-full">
+      <app-sidebar></app-sidebar>
+    </div>
+  </div>
+
+  <!-- Right Application Column (Header + Scrollable Main Content) -->
+  <div class="min-w-0 flex-1 h-full flex flex-col overflow-hidden">
+    <!-- Fixed Top Navigation -->
+    <app-header (toggleSidebar)="sidebarOpen = !sidebarOpen"></app-header>
+
+    <!-- Scrollable Routed Content Area -->
+    <main class="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+
+<!-- Global Notifications & Dialogs -->
+<app-toast></app-toast>
+<app-confirm-dialog></app-confirm-dialog>

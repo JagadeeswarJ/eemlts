@@ -1,0 +1,148 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: employee-api-gateway
+
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 3000
+        response-timeout: 5s
+      server:
+        webflux:
+          routes:
+            # 1. Auth routes to Employee-Management-Service
+            - id: auth-service-route
+              uri: lb://employee-management-service
+              predicates:
+                - Path=/api/v1/auth/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: authCircuitBreaker
+
+            # 2. Employee routes to Employee-Management-Service
+            - id: employee-service-route
+              uri: lb://employee-management-service
+              predicates:
+                - Path=/api/v1/employees/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: employeeCircuitBreaker
+
+            # 2b. Department routes to Employee-Management-Service
+            - id: department-service-route
+              uri: lb://employee-management-service
+              predicates:
+                - Path=/api/v1/departments/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: departmentCircuitBreaker
+
+            # 3. Attendance routes to Attendance-Management-Service
+            - id: attendance-service-route
+              uri: lb://attendance-management-service
+              predicates:
+                - Path=/api/v1/attendance/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: attendanceCircuitBreaker
+
+            # 4. Leave routes to Leave-Management-Service
+            - id: leave-service-route
+              uri: lb://leave-management-service
+              predicates:
+                - Path=/api/v1/leaves/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: leaveCircuitBreaker
+
+            # 5. Reporting routes to Reporting-Dashboard-Service
+            - id: reporting-service-route
+              uri: lb://reporting-dashboard-service
+              predicates:
+                - Path=/api/v1/reports/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: reportingCircuitBreaker
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    registry-fetch-interval-seconds: 5
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+
+jwt:
+  secret: employeeManagementSystemSecretKey2026SecureEnterpriseKeyMustBeAtLeast256BitsLong!
+  expiration: 7200000
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 20
+        permitted-number-of-calls-in-half-open-state: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+    instances:
+      authCircuitBreaker:
+        base-config: default
+      employeeCircuitBreaker:
+        base-config: default
+      departmentCircuitBreaker:
+        base-config: default
+      attendanceCircuitBreaker:
+        base-config: default
+      leaveCircuitBreaker:
+        base-config: default
+      reportingCircuitBreaker:
+        base-config: default
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 5s
+    instances:
+      authCircuitBreaker:
+        base-config: default
+      employeeCircuitBreaker:
+        base-config: default
+      departmentCircuitBreaker:
+        base-config: default
+      attendanceCircuitBreaker:
+        base-config: default
+      leaveCircuitBreaker:
+        base-config: default
+      reportingCircuitBreaker:
+        base-config: default
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.employee: DEBUG
+    org.springframework.cloud.gateway: INFO

@@ -1,0 +1,55 @@
+<header class="h-16 bg-white border-b border-slate-200 shrink-0 z-30 px-4 sm:px-6 flex items-center justify-between">
+  <div class="flex items-center gap-3">
+    <button
+      type="button"
+      (click)="toggleSidebar.emit()"
+      aria-label="Toggle navigation drawer"
+      class="lg:hidden p-2 rounded-xl text-slate-500 hover:bg-slate-100 transition-colors"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-xs">
+        WP
+      </div>
+      <div>
+        <h1 class="text-base font-bold text-slate-800 tracking-tight leading-none">WorkPulse</h1>
+        <span class="text-[10px] text-slate-400 font-medium">Enterprise HR & Leaves</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <ng-container *ngIf="currentUser$ | async as user">
+      <div class="flex items-center gap-3 text-right">
+        <div>
+          <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-tight">{{ user.fullName || user.email }}</p>
+          <div class="flex items-center justify-end gap-1.5 mt-0.5">
+            <span class="text-[11px] text-slate-500 hidden sm:inline">{{ user.designation }}</span>
+            <span class="hidden sm:inline-block w-1 h-1 rounded-full bg-slate-300"></span>
+            <span class="text-[10px] font-bold px-1.5 py-0.2 rounded uppercase bg-blue-50 text-blue-700 border border-blue-200">
+              {{ user.role }}
+            </span>
+          </div>
+        </div>
+        <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-700 text-xs sm:text-sm">
+          {{ getInitials(user.fullName || user.email) }}
+        </div>
+      </div>
+    </ng-container>
+
+    <button
+      type="button"
+      (click)="onLogout()"
+      title="Sign Out"
+      aria-label="Sign out of system"
+      class="p-2 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+      </svg>
+    </button>
+  </div>
+</header>

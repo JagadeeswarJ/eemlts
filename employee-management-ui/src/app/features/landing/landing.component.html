@@ -1,0 +1,386 @@
+<div class="min-h-screen bg-slate-50 text-slate-800 flex flex-col selection:bg-blue-500 selection:text-white">
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 transition-shadow duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      <!-- Logo & Brand Name -->
+      <a routerLink="/" class="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 via-blue-600 to-indigo-600 flex items-center justify-center text-white font-black text-base shadow-sm group-hover:scale-105 transition-transform duration-200">
+          WP
+        </div>
+        <div>
+          <span class="text-xl font-black text-slate-900 tracking-tight leading-none block">WorkPulse</span>
+          <span class="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Enterprise HR & Leaves</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
+        <a href="#features" class="hover:text-blue-600 transition-colors">Features</a>
+        <a href="#how-it-works" class="hover:text-blue-600 transition-colors">How It Works</a>
+        <a href="#benefits" class="hover:text-blue-600 transition-colors">Role Benefits</a>
+      </nav>
+
+      <!-- Desktop Auth Buttons -->
+      <div class="hidden sm:flex items-center gap-3">
+        <a
+          routerLink="/sign-in"
+          class="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-blue-600 hover:bg-slate-100/80 transition-colors"
+        >
+          Sign In
+        </a>
+        <a
+          routerLink="/sign-up"
+          class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-xs transition-colors"
+        >
+          Create Account
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        type="button"
+        (click)="mobileMenuOpen.set(!mobileMenuOpen())"
+        aria-label="Toggle Navigation Menu"
+        class="md:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div *ngIf="mobileMenuOpen()" class="md:hidden border-t border-slate-100 bg-white px-4 pt-3 pb-5 space-y-3 shadow-lg">
+      <nav class="space-y-1 text-sm font-semibold text-slate-700">
+        <a href="#features" (click)="mobileMenuOpen.set(false)" class="block px-3 py-2 rounded-lg hover:bg-slate-50">Features</a>
+        <a href="#how-it-works" (click)="mobileMenuOpen.set(false)" class="block px-3 py-2 rounded-lg hover:bg-slate-50">How It Works</a>
+        <a href="#benefits" (click)="mobileMenuOpen.set(false)" class="block px-3 py-2 rounded-lg hover:bg-slate-50">Role Benefits</a>
+      </nav>
+      <div class="pt-3 border-t border-slate-100 flex flex-col gap-2">
+        <a
+          routerLink="/sign-in"
+          (click)="mobileMenuOpen.set(false)"
+          class="w-full py-2.5 text-center rounded-xl text-xs font-bold text-slate-700 bg-slate-100"
+        >
+          Sign In
+        </a>
+        <a
+          routerLink="/sign-up"
+          (click)="mobileMenuOpen.set(false)"
+          class="w-full py-2.5 text-center rounded-xl text-xs font-bold text-white bg-blue-600"
+        >
+          Create Account
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1">
+    <!-- HERO SECTION -->
+    <section class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-gradient-to-b from-blue-50/50 via-indigo-50/20 to-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          <!-- Left Copy Column -->
+          <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-100/70 border border-blue-200 text-blue-700 text-xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+              Modern Human Capital & Leave Tracking
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+              Your workday, organized in <span class="bg-gradient-to-r from-blue-700 via-indigo-600 to-sky-600 bg-clip-text text-transparent">one place</span>.
+            </h1>
+
+            <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+              Manage attendance, request leave, follow approvals, and stay connected with your workplace through a simple employee experience.
+            </p>
+
+            <!-- Hero CTAs -->
+            <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
+              <a
+                routerLink="/sign-up"
+                class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 transition-all text-center"
+              >
+                Get Started &rarr;
+              </a>
+              <a
+                routerLink="/sign-in"
+                class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm border border-slate-300 shadow-xs transition-all text-center"
+              >
+                Sign In to Portal
+              </a>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="pt-6 border-t border-slate-200/80 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-slate-500 font-medium">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                Enterprise Role Hierarchy
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                Real-time Balance Tracking
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                Audited Attendance Logs
+              </span>
+            </div>
+          </div>
+
+          <!-- Right Mockup Column -->
+          <div class="lg:col-span-5">
+            <div class="relative mx-auto max-w-md bg-white rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-200/50 p-5 space-y-4">
+              <!-- Mock Header -->
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+                    WP
+                  </div>
+                  <span class="font-bold text-slate-800 text-xs">WorkPulse Live Preview</span>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">
+                  Active Shift
+                </span>
+              </div>
+
+              <!-- Mock Punch Widget -->
+              <div class="p-3.5 bg-gradient-to-r from-blue-900 to-indigo-900 rounded-xl text-white space-y-2">
+                <div class="flex items-center justify-between text-[11px] text-blue-200">
+                  <span>Today's Workday</span>
+                  <span class="font-mono text-emerald-300 font-bold">8h 15m logged</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <span class="text-xs font-bold block">In: 09:02 AM</span>
+                    <span class="text-[10px] text-blue-200">Engineering &bull; San Francisco</span>
+                  </div>
+                  <span class="px-3 py-1 bg-emerald-500 rounded-lg text-xs font-bold shadow-xs">
+                    Checked In
+                  </span>
+                </div>
+              </div>
+
+              <!-- Mock Balances -->
+              <div class="grid grid-cols-3 gap-2 text-center">
+                <div class="p-2.5 rounded-xl border border-blue-200 bg-blue-50/50">
+                  <span class="text-[10px] uppercase font-bold text-blue-700 block">Casual</span>
+                  <span class="text-base font-black text-slate-800">11</span>
+                  <span class="text-[9px] text-slate-400 block">days left</span>
+                </div>
+                <div class="p-2.5 rounded-xl border border-rose-200 bg-rose-50/50">
+                  <span class="text-[10px] uppercase font-bold text-rose-700 block">Sick</span>
+                  <span class="text-base font-black text-slate-800">10</span>
+                  <span class="text-[9px] text-slate-400 block">days left</span>
+                </div>
+                <div class="p-2.5 rounded-xl border border-emerald-200 bg-emerald-50/50">
+                  <span class="text-[10px] uppercase font-bold text-emerald-700 block">Earned</span>
+                  <span class="text-base font-black text-slate-800">16</span>
+                  <span class="text-[9px] text-slate-400 block">days left</span>
+                </div>
+              </div>
+
+              <!-- Mock Upcoming Event -->
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex flex-col items-center justify-center text-[10px] font-bold leading-none">
+                    <span>NOV</span>
+                    <span>26</span>
+                  </div>
+                  <div>
+                    <p class="font-bold text-slate-800">Thanksgiving Day</p>
+                    <p class="text-[10px] text-slate-400">Paid Public Holiday</p>
+                  </div>
+                </div>
+                <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Upcoming</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section id="features" class="py-20 bg-white border-t border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Unified Workplace Suite</span>
+          <h2 class="text-3xl font-black text-slate-900 tracking-tight">Everything your organization needs</h2>
+          <p class="text-sm text-slate-500">
+            Designed for clarity, fast workflows, and complete organizational visibility without unnecessary complexity.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 hover:border-blue-300 transition-colors shadow-xs">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Attendance Tracking</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Fast daily check-in and check-out, automatic working hours calculations, half-day detection, and audit trail adjustments.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 hover:border-blue-300 transition-colors shadow-xs">
+            <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Leave Management</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Real-time balances across Casual, Sick, and Earned leaves. Overlap prevention, balance protection, and automated restorations on cancel.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 hover:border-blue-300 transition-colors shadow-xs">
+            <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Employee Directory</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Comprehensive personnel records, department assignments, reporting manager structures, and emergency contact details.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 hover:border-blue-300 transition-colors shadow-xs">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Team Approvals</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Review queues for managers and HR leaders. Endorse or reject applications with comments and immediate balance synchronization.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 hover:border-blue-300 transition-colors shadow-xs">
+            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Workforce Insights</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Department headcounts, daily presence percentages, leave consumption trends, and organization-wide compliance summaries.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 hover:border-blue-300 transition-colors shadow-xs">
+            <div class="w-10 h-10 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center font-bold">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">Role-Based Access</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Tailored experiences for Employees, Managers, HR Specialists, and System Administrators with strictly enforced permissions.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROLE BENEFITS SECTION -->
+    <section id="benefits" class="py-20 bg-slate-50 border-t border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Tailored For Every Role</span>
+          <h2 class="text-3xl font-black text-slate-900 tracking-tight">Built for your entire workforce</h2>
+          <p class="text-sm text-slate-500">Every team member receives exactly the tools they need.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-xs">
+            <span class="text-[11px] font-bold text-blue-600 uppercase tracking-wider">For Staff Employees</span>
+            <h3 class="text-lg font-bold text-slate-900">Self-Service Independence</h3>
+            <ul class="text-xs text-slate-600 space-y-2 pt-2">
+              <li class="flex items-center gap-2">&bull; Fast biometric check-in & check-out</li>
+              <li class="flex items-center gap-2">&bull; Real-time leave balance updates</li>
+              <li class="flex items-center gap-2">&bull; Self-service time-off applications</li>
+              <li class="flex items-center gap-2">&bull; Personal attendance history & adjustments</li>
+            </ul>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-xs">
+            <span class="text-[11px] font-bold text-indigo-600 uppercase tracking-wider">For Team Managers</span>
+            <h3 class="text-lg font-bold text-slate-900">Team Clarity & Approvals</h3>
+            <ul class="text-xs text-slate-600 space-y-2 pt-2">
+              <li class="flex items-center gap-2">&bull; Today's team presence overview</li>
+              <li class="flex items-center gap-2">&bull; Instant approval queue with comments</li>
+              <li class="flex items-center gap-2">&bull; Shared team leave calendar</li>
+              <li class="flex items-center gap-2">&bull; Department attendance compliance</li>
+            </ul>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-xs">
+            <span class="text-[11px] font-bold text-sky-600 uppercase tracking-wider">For HR & Administrators</span>
+            <h3 class="text-lg font-bold text-slate-900">Governance & Insights</h3>
+            <ul class="text-xs text-slate-600 space-y-2 pt-2">
+              <li class="flex items-center gap-2">&bull; Centralized employee onboarding</li>
+              <li class="flex items-center gap-2">&bull; Leave quota allocations & policy control</li>
+              <li class="flex items-center gap-2">&bull; Department-wide analytics & reports</li>
+              <li class="flex items-center gap-2">&bull; Audit logging for compliance assurance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="py-16 bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white text-center">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <h2 class="text-2xl sm:text-4xl font-black tracking-tight">Elevate your workplace experience today</h2>
+        <p class="text-sm text-blue-200 max-w-xl mx-auto">
+          Join thousands of team members managing attendance, tracking leaves, and staying organized with WorkPulse.
+        </p>
+        <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a
+            routerLink="/sign-up"
+            class="w-full sm:w-auto px-6 py-3 bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs rounded-xl shadow-md transition-all"
+          >
+            Create Account
+          </a>
+          <a
+            routerLink="/sign-in"
+            class="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all"
+          >
+            Sign In to Portal
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 py-8 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-6 h-6 rounded-lg bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+          WP
+        </div>
+        <span class="font-bold text-slate-900 text-sm">WorkPulse</span>
+        <span class="text-slate-400">&bull; Enterprise Employee Management</span>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <span class="text-slate-400">Privacy Policy</span>
+        <span class="text-slate-400">Terms of Service</span>
+        <span class="text-slate-400">&copy; {{ currentYear }} WorkPulse. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+</div>

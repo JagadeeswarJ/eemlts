@@ -1,0 +1,412 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "WorkPulse - Employee Management & Leave Tracking System API",
+    "version": "1.0.0",
+    "description": "Production-grade reactive microservices REST API for WorkPulse. Enforces role-based access control, trusted-header propagation, immutable audit trails, and strict server-side validation."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "WorkPulse API Gateway"
+    }
+  ],
+  "paths": {
+    "/api/v1/auth/login": {
+      "post": {
+        "summary": "Authenticate user and issue JWT session",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": { "type": "string", "example": "admin@company.com" },
+                  "password": { "type": "string", "example": "Password123!" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Authentication successful, returns user profile and sets HttpOnly cookie" },
+          "401": { "description": "Invalid credentials or deactivated account" }
+        }
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "summary": "Retrieve currently authenticated user profile",
+        "tags": ["Authentication"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Current profile details returned" },
+          "401": { "description": "Unauthenticated" }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "summary": "Invalidate user session and clear HttpOnly cookie",
+        "tags": ["Authentication"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Logged out successfully" }
+        }
+      }
+    },
+    "/api/v1/employees/me/profile": {
+      "put": {
+        "summary": "Update personal contact details for authenticated employee",
+        "description": "Allows all authenticated employees to update only non-protected contact fields: phone, residential address, emergency contact. Protected employment fields (role, email, designation, department, salary) are strictly preserved.",
+        "tags": ["Employee Self-Service"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["phone", "address", "emergencyContact"],
+                "properties": {
+                  "phone": { "type": "string", "example": "+1-555-0199" },
+                  "address": { "type": "string", "example": "123 Market Street, Apt 4B" },
+                  "emergencyContact": { "type": "string", "example": "Jane Doe - +1-555-0188" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Personal profile contact details updated successfully" },
+          "400": { "description": "Validation failure" },
+          "401": { "description": "Unauthenticated" }
+        }
+      }
+    },
+    "/api/v1/departments": {
+      "get": {
+        "summary": "List active departments for form selection and lookups",
+        "tags": ["Department Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "List of active departments returned" }
+        }
+      },
+      "post": {
+        "summary": "Create a new department (Admin & HR only)",
+        "tags": ["Department Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "code"],
+                "properties": {
+                  "name": { "type": "string", "example": "Information Security" },
+                  "code": { "type": "string", "example": "INFOSEC" },
+                  "description": { "type": "string", "example": "Corporate cyber security operations" },
+                  "managerId": { "type": "integer", "nullable": true, "example": 3 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Department created successfully" },
+          "409": { "description": "Department code or name already exists" }
+        }
+      }
+    },
+    "/api/v1/departments/admin": {
+      "get": {
+        "summary": "Administrative paginated department listing with status and search",
+        "tags": ["Department Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "search", "in": "query", "schema": { "type": "string" } },
+          { "name": "isActive", "in": "query", "schema": { "type": "boolean" } },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 0 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10 } }
+        ],
+        "responses": {
+          "200": { "description": "Paginated departments with active employee counts" },
+          "403": { "description": "Access denied. Insufficient privileges." }
+        }
+      }
+    },
+    "/api/v1/departments/{id}": {
+      "get": {
+        "summary": "Retrieve department details by ID",
+        "tags": ["Department Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Department details" },
+          "404": { "description": "Department not found" }
+        }
+      },
+      "put": {
+        "summary": "Update department details (Admin & HR only)",
+        "tags": ["Department Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "code"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "code": { "type": "string" },
+                  "description": { "type": "string" },
+                  "managerId": { "type": "integer", "nullable": true }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Department updated successfully" },
+          "409": { "description": "Code or name conflict" }
+        }
+      }
+    },
+    "/api/v1/departments/{id}/status": {
+      "patch": {
+        "summary": "Activate or deactivate department (Admin & HR only)",
+        "description": "Rejects deactivation if active employees are currently assigned, returning HTTP 409 Conflict.",
+        "tags": ["Department Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["isActive"],
+                "properties": { "isActive": { "type": "boolean" } }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Department status updated" },
+          "409": { "description": "Cannot deactivate department: active employees assigned" }
+        }
+      }
+    },
+    "/api/v1/leaves/types": {
+      "get": {
+        "summary": "List active leave policy types for leave applications",
+        "tags": ["Leave Management"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "200": { "description": "List of active leave types" } }
+      }
+    },
+    "/api/v1/leaves/admin/types": {
+      "get": {
+        "summary": "Administrative leave policy types listing (Admin & HR only)",
+        "tags": ["Leave Policy Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "search", "in": "query", "schema": { "type": "string" } },
+          { "name": "isActive", "in": "query", "schema": { "type": "boolean" } },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 0 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10 } }
+        ],
+        "responses": { "200": { "description": "Paginated leave types" } }
+      },
+      "post": {
+        "summary": "Create a new leave policy type (Admin & HR only)",
+        "tags": ["Leave Policy Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["code", "name", "annualQuota"],
+                "properties": {
+                  "code": { "type": "string", "example": "COMPENSATORY" },
+                  "name": { "type": "string", "example": "Compensatory Off" },
+                  "description": { "type": "string", "example": "Overtime comp off" },
+                  "annualQuota": { "type": "integer", "example": 5 },
+                  "isCarryForward": { "type": "boolean", "default": false }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Leave type created" },
+          "409": { "description": "Leave type code already exists" }
+        }
+      }
+    },
+    "/api/v1/leaves/admin/types/{id}": {
+      "put": {
+        "summary": "Update leave policy type configuration (Admin & HR only)",
+        "tags": ["Leave Policy Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Leave type updated" } }
+      }
+    },
+    "/api/v1/leaves/admin/types/{id}/status": {
+      "patch": {
+        "summary": "Activate or deactivate leave type (Admin & HR only)",
+        "tags": ["Leave Policy Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Leave type status updated" } }
+      }
+    },
+    "/api/v1/leaves/admin/balances": {
+      "get": {
+        "summary": "Search and filter organization employee leave balances (Admin & HR only)",
+        "tags": ["Leave Allocation Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "employeeId", "in": "query", "schema": { "type": "integer" } },
+          { "name": "departmentId", "in": "query", "schema": { "type": "integer" } },
+          { "name": "year", "in": "query", "schema": { "type": "integer" } },
+          { "name": "search", "in": "query", "schema": { "type": "string" } },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 0 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10 } }
+        ],
+        "responses": { "200": { "description": "Paginated employee leave allocations" } }
+      }
+    },
+    "/api/v1/leaves/admin/balances/{employeeId}/{leaveTypeId}": {
+      "put": {
+        "summary": "Adjust employee leave quota allocation with mandatory audit reason (Admin & HR only)",
+        "tags": ["Leave Allocation Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "employeeId", "in": "path", "required": true, "schema": { "type": "integer" } },
+          { "name": "leaveTypeId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["year", "newTotal", "reason"],
+                "properties": {
+                  "year": { "type": "integer", "example": 2026 },
+                  "newTotal": { "type": "number", "example": 15.0 },
+                  "reason": { "type": "string", "example": "Annual promotion quota increase" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Allocation adjusted and audit record created" },
+          "400": { "description": "New total less than used plus pending days or invalid input" }
+        }
+      }
+    },
+    "/api/v1/leaves/admin/balance-adjustments": {
+      "get": {
+        "summary": "Retrieve immutable leave quota adjustment audit history (Admin & HR only)",
+        "tags": ["Leave Allocation Administration"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "employeeId", "in": "query", "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "List of allocation adjustment audit records" } }
+      }
+    },
+    "/api/v1/leaves/balances": {
+      "get": {
+        "summary": "Retrieve role-scoped leave balances",
+        "description": "Server-side authorization: EMPLOYEE can view only own balance (IDOR protected); MANAGER can view own balance and direct reports only; ADMIN and HR can view any employee.",
+        "tags": ["Leave Management"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "employeeId", "in": "query", "schema": { "type": "integer" } },
+          { "name": "year", "in": "query", "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Leave balances list" },
+          "403": { "description": "Unauthorized access to employee balances" }
+        }
+      }
+    },
+    "/api/v1/leaves/apply": {
+      "post": {
+        "summary": "Submit leave request",
+        "tags": ["Leave Management"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "201": { "description": "Application submitted" } }
+      }
+    },
+    "/api/v1/leaves/{id}/approve": {
+      "put": {
+        "summary": "Approve leave request (Manager/HR/Admin)",
+        "description": "Validates that reviewer cannot approve own request and manager can approve direct reports only. Deducts balance once.",
+        "tags": ["Leave Management"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Leave request approved" },
+          "400": { "description": "Self-approval attempted or already processed" },
+          "403": { "description": "Non-direct report request" }
+        }
+      }
+    },
+    "/api/v1/leaves/{id}/reject": {
+      "put": {
+        "summary": "Reject leave request (Manager/HR/Admin)",
+        "description": "Requires mandatory rejection reason comment. Restores pending balance.",
+        "tags": ["Leave Management"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Leave request rejected" },
+          "400": { "description": "Rejection reason missing" }
+        }
+      }
+    },
+    "/api/v1/attendance/corrections": {
+      "post": {
+        "summary": "Submit attendance punch correction request",
+        "tags": ["Attendance Management"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "200": { "description": "Correction request audit log created" } }
+      }
+    },
+    "/api/v1/attendance/corrections/{id}/decision": {
+      "put": {
+        "summary": "Process attendance correction decision (Manager/HR/Admin)",
+        "description": "Self-approval is rejected. Cannot process already processed requests. When approved, updates the authoritative attendance record.",
+        "tags": ["Attendance Management"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Correction processed and attendance record updated if approved" },
+          "400": { "description": "Self-approval or double-processing rejected" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

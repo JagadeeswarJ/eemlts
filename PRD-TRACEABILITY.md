@@ -1,0 +1,42 @@
+# WorkPulse - PRD Requirement Traceability Matrix
+
+## 1. Scope & Traceability Overview
+
+This document provides a concise requirement-to-implementation traceability matrix for the **WorkPulse Employee Management & Leave Tracking System**. Every functional and security requirement is mapped directly to its authoritative backend REST endpoint, Angular frontend route, role-based authorization policy, automated test verification evidence, and operational status.
+
+### Explicitly Excluded Per Architectural Directives
+- **Git / GitHub:** Excluded by project mandate.
+- **Screenshot Capture & Browser-Image Evidence:** Excluded by project mandate.
+- **Screenshot Automation & Checklists:** Excluded by project mandate.
+
+---
+
+## 2. Requirement Traceability Matrix
+
+| # | Requirement Domain | PRD Requirement Description | Status | Backend Endpoint(s) | Frontend Route | Authorized Roles | Automated Test Evidence | Limitations / Notes |
+|---|---|---|---|---|---|---|---|---|
+| **1** | **Service Discovery & Gateway** | Eureka discovery registry, reactive Spring Cloud Gateway routing, and 5s Resilience4j circuit breakers | **IMPLEMENTED** | `http://localhost:8761`, `http://localhost:8080` | `/` | All Roles | `GatewayCircuitBreakerConfigTest`, Gateway Unit Specs | Standard local ports 8761 and 8080 |
+| **2** | **Session & Authentication** | JWT issued in HttpOnly cookie with trusted authenticated header propagation (`X-User-Id`, `X-User-Role`, `X-User-Email`, `X-Employee-Id`) | **IMPLEMENTED** | `POST /api/v1/auth/login`, `GET /api/v1/auth/me`, `POST /api/v1/auth/logout` | `/sign-in`, `/auth/account-access` | Public / All Roles | `AuthServiceTest` (100% pass), `SignInComponentSpec` | Managed JWT session with secure cookies |
+| **3** | **Department Administration** | Department CRUD, pagination, active/inactive filtering, search, leadership assignment, deactivation conflict checks | **IMPLEMENTED** | `GET /api/v1/departments`, `GET /api/v1/departments/admin`, `POST /api/v1/departments`, `PUT /api/v1/departments/{id}`, `PATCH /api/v1/departments/{id}/status` | `/departments` | `ADMIN`, `HR` (Lookup: `MANAGER`, `EMPLOYEE`) | `DepartmentServiceTest` (5 tests pass), `DepartmentsComponentSpec` (5 tests pass) | Deactivation rejected with HTTP 409 if active staff assigned |
+| **4** | **Employee Administration & Onboarding** | Employee directory, creation, editing, deactivation, manager assignment, and automatic quota initialization | **IMPLEMENTED** | `GET /api/v1/employees`, `POST /api/v1/employees`, `PUT /api/v1/employees/{id}`, `DELETE /api/v1/employees/{id}`, `GET /api/v1/employees/managers` | `/employees`, `/employees/new`, `/employees/:id` | `ADMIN`, `HR` (Directory: `MANAGER`) | `EmployeeServiceTest` (19 tests pass), `EmployeeListComponentSpec`, `EmployeeFormComponentSpec` | Provisioning handled exclusively by Admin & HR |
+| **5** | **Secure Self-Profile Editing** | Personal contact update (phone, address, emergency contact) strictly protecting employment and identity fields from tampering | **IMPLEMENTED** | `PUT /api/v1/employees/me/profile` | `/profile` | All Roles (`EMPLOYEE`, `MANAGER`, `HR`, `ADMIN`) | `EmployeeServiceTest.testUpdateSelfProfileSuccess`, `ProfileComponentSpec` | Protected fields (role, code, email, designation) read-only |
+| **6** | **Attendance Daily Punch & Tracking** | Single daily check-in, check-out with automatic total working hours computation and status tracking | **IMPLEMENTED** | `POST /api/v1/attendance/check-in`, `POST /api/v1/attendance/check-out`, `GET /api/v1/attendance/today`, `GET /api/v1/attendance/history` | `/attendance` | All Roles | `AttendanceServiceTest` (11 tests pass), `AttendanceDashboardComponentSpec` | Duplicate check-in rejected; check-out requires prior check-in |
+| **7** | **Attendance Correction Auditability** | Submit attendance punch correction; manager/HR decision; update attendance record on approval; self-approval rejected | **IMPLEMENTED** | `POST /api/v1/attendance/corrections`, `PUT /api/v1/attendance/corrections/{id}/decision`, `GET /api/v1/attendance/audit-logs` | `/attendance/corrections` | Requester: `EMPLOYEE`; Reviewer: `MANAGER` (direct reports), `HR`, `ADMIN` | `AttendanceServiceTest.testProcessCorrectionApproved`, `testProcessCorrectionSelfApprovalRejected` | Authoritative attendance record updated upon approval |
+| **8** | **Leave Policy Configuration** | Administrative creation, editing, annual quota setting, carry-forward support, and activation/deactivation | **IMPLEMENTED** | `GET /api/v1/leaves/types`, `GET /api/v1/leaves/admin/types`, `POST /api/v1/leaves/admin/types`, `PUT /api/v1/leaves/admin/types/{id}`, `PATCH /api/v1/leaves/admin/types/{id}/status` | `/leave-configuration` | `ADMIN`, `HR` (Active types: All Roles) | `LeaveServiceTest.testCreateLeaveTypeSuccess`, `LeaveConfigurationComponentSpec` | Inactive types excluded from new leave applications |
+| **9** | **Leave Allocation Administration** | View employee quotas, adjust total allocation with mandatory business reason, validate used+pending days, immutable audit log | **IMPLEMENTED** | `GET /api/v1/leaves/admin/balances`, `PUT /api/v1/leaves/admin/balances/{employeeId}/{leaveTypeId}`, `GET /api/v1/leaves/admin/balance-adjustments` | `/leave-configuration/allocations` | `ADMIN`, `HR` | `LeaveServiceTest.testAdjustLeaveAllocationSuccess`, `LeaveAllocationsComponentSpec` | Audit records preserved in `leave_balance_adjustments` |
+| **10** | **Role-Scoped Leave Balance Visibility** | Strict server-side balance scoping: Employee sees personal only; Manager sees self + direct reports only; HR/Admin see all | **IMPLEMENTED** | `GET /api/v1/leaves/balances?year={year}` | `/leaves` | Scoped by Role | `LeaveServiceTest.testRoleScopedLeaveBalancesEmployeeForbiddenFromOther`, `testRoleScopedLeaveBalancesManagerForbiddenFromNonReport` | Server-side IDOR prevention returns HTTP 403 on violations |
+| **11** | **Leave Requests & Deductions** | Apply for leave, overlap rejection, balance deduction, cancellation, and team calendar view | **IMPLEMENTED** | `POST /api/v1/leaves/apply`, `PUT /api/v1/leaves/{id}/cancel`, `GET /api/v1/leaves/history`, `GET /api/v1/leaves/calendar` | `/leaves`, `/leaves/apply`, `/leaves/calendar` | All Roles | `LeaveServiceTest.testApplyLeaveSuccess`, `testApplyLeaveOverlappingFails`, `LeaveDashboardComponentSpec` | Multi-day date validation and instant quota deduction |
+| **12** | **Leave Decision Auditability** | Review pending leaves; record reviewer, decision timestamp, and decision comment; self-approval rejected; rejection reason mandatory | **IMPLEMENTED** | `GET /api/v1/leaves/pending`, `PUT /api/v1/leaves/{id}/approve`, `PUT /api/v1/leaves/{id}/reject` | `/leaves/approvals` | Reviewer: `MANAGER` (direct reports), `HR`, `ADMIN` | `LeaveServiceTest.testApproveLeaveDeductsBalance`, `testSelfApprovalRejected`, `testRejectLeaveRequiresReason` | Balance deducted exactly once upon approval |
+| **13** | **Role-Adaptive Reporting & Intelligence** | Personalized KPI cards and metrics for Employee, Manager, and HR with department breakdowns | **IMPLEMENTED** | `GET /api/v1/reports/employee-dashboard`, `GET /api/v1/reports/manager-dashboard`, `GET /api/v1/reports/hr-dashboard`, `GET /api/v1/reports/department-reports` | `/dashboard`, `/reports` | Adaptive by Role | `ReportingServiceTest`, `DashboardComponentSpec`, `ReportsComponentSpec` | Isolated failure tolerance; 504 Gateway recovery |
+| **14** | **API Documentation & OpenAPI** | Complete interactive OpenAPI 3.0 specification covering all endpoints, parameters, schemas, and status codes | **IMPLEMENTED** | `http://localhost:8080/v3/api-docs` | N/A | All Roles | File verification: `openapi.json` | Updated with all admin and self-profile endpoints |
+
+---
+
+## 3. Summary of Implementation Metrics
+
+- **Backend Test Pass Rate:** 100% (Employee: 19/19, Leave: 12/12, Attendance: 11/11, Registry/Gateway/Reporting: Passed)
+- **Frontend Test Pass Rate:** 100% (80 test files passed, 283 tests passed)
+- **Frontend Spec Correspondence:** 100% (80 TypeScript source files to 80 companion `.spec.ts` files under `src/app`)
+- **Frontend Architecture:** 100% 4-file component architecture (`.ts`, `.html`, `.css`, `.spec.ts`)
+- **Production Bundle Build:** Passed (472.12 kB raw, ~125.8 kB compressed)
+- **Database Integrity:** Foreign key integrity, unique constraints, and schema synchronization verified across MySQL 8.

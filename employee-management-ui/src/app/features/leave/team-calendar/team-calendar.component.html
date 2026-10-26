@@ -1,0 +1,55 @@
+<div class="space-y-6">
+  <!-- Top Navigation & Header -->
+  <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+    <div class="flex items-center gap-3">
+      <a
+        routerLink="/leaves"
+        class="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+        title="Back to Leaves"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+      </a>
+      <div>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Team Leave Calendar</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Visualize approved time-off schedules across colleagues and departments.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
+    <app-loading-spinner
+      *ngIf="loading$ | async"
+      [loading]="true"
+      text="Loading schedule calendar..."
+    ></app-loading-spinner>
+
+    <div *ngIf="!(loading$ | async)">
+      <div *ngIf="((calendarItems$ | async)?.length || 0) === 0" class="p-12 text-center text-slate-400 text-xs">
+        No approved team leaves scheduled for this upcoming period.
+      </div>
+
+      <div *ngIf="((calendarItems$ | async)?.length || 0) > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div *ngFor="let item of calendarItems$ | async" class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+          <div class="flex items-start justify-between">
+            <div>
+              <h4 class="text-sm font-bold text-slate-900">{{ item.employeeName }}</h4>
+              <span class="text-[11px] font-mono text-slate-400">{{ item.employeeCode }}</span>
+            </div>
+            <app-status-badge [status]="item.status"></app-status-badge>
+          </div>
+
+          <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
+            <span class="font-semibold text-slate-700">{{ item.leaveTypeName }}</span>
+            <span class="font-bold text-blue-600">{{ item.totalDays }} Days</span>
+          </div>
+
+          <div class="p-2 bg-white rounded-lg border border-slate-100 text-[11px] text-slate-600 font-mono flex items-center justify-center">
+            {{ item.startDate }} &rarr; {{ item.endDate }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
