@@ -1,0 +1,4 @@
+com\employee\management\service\AuthServiceTest.class
+com\employee\management\service\DepartmentServiceTest.class
+com\employee\management\EmployeeManagementServiceApplicationTest.class
+com\employee\management\service\EmployeeServiceTest.class

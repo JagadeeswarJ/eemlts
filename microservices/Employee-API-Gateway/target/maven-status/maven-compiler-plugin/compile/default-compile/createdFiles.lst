@@ -1,0 +1,16 @@
+com\employee\gateway\security\GatewayJwtSecurityContextRepository.class
+com\employee\gateway\dto\ErrorResponseDto$ErrorResponseDtoBuilder.class
+com\employee\gateway\security\TrustedHeaderNames.class
+com\employee\gateway\config\GatewayCircuitBreakerConfig.class
+com\employee\gateway\config\CorsConfig.class
+com\employee\gateway\filter\TrustedHeaderFilter.class
+com\employee\gateway\security\SecurityErrorResponseWriter.class
+com\employee\gateway\security\GatewayAuthenticatedUser$GatewayAuthenticatedUserBuilder.class
+com\employee\gateway\EmployeeApiGatewayApplication.class
+com\employee\gateway\filter\CorrelationIdFilter.class
+com\employee\gateway\security\GatewayAuthenticatedUser.class
+com\employee\gateway\security\JwtUtil.class
+com\employee\gateway\security\ReactiveAuthenticationEntryPoint.class
+com\employee\gateway\dto\ErrorResponseDto.class
+com\employee\gateway\config\SecurityConfig.class
+com\employee\gateway\security\ReactiveAccessDeniedHandler.class
