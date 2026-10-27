@@ -4,9 +4,5 @@ db username and password: in all the microservices, it has db credentials,
 
 -------
 
-ADD APPRIOTE THINGS TO THE GIT IGNORE,
-LIKE THE LOGS FILE IN MICROSERVICES, 
-AND TARGET FOLDERS IN EACH MICROSERVICES.
-AND THE NODE_MODULES:
-and the .angular folder in FE folder
-----
+update the readme.dm files, for the current codebase, and  project..
+
