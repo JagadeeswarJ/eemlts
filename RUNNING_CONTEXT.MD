@@ -1,7 +1,7 @@
 # EMS — Running Implementation Context
 
 ## 1. Project Overview
-- **Product:** EMS (Employee Management System) — enterprise reactive human capital, attendance, and leave management platform.
+- **Product:** EMS (Employee Management System) — enterprise reactive workforce, attendance, and leave management platform.
 - **Palette (Amber Walnut Morning):** Canvas `#EBEFEE`, Warm Sand `#CCB499`, Muted Terracotta `#C8906D`, Burnt Amber `#BB6C43`, Dark Walnut `#4A413C` / `#3E3530`. Inline SVG primitives only (no third-party icon libraries, no emojis).
 - **Stack:** Java 17, Spring Boot 4.1.1, Spring WebFlux, Spring Cloud Gateway, Eureka Registry, Spring Data R2DBC, MySQL 8 (`employee_management_db`), Angular 21, NgRx 21, Tailwind CSS 4, Playwright 1.58.
 - **Rules:** Direct disk writes only; execute CLI via `cmd.exe /c` with inline directory changes; git is read-only.
@@ -65,6 +65,8 @@ Angular UI (4200) --[HTTP / HttpOnly JWT Cookie / CORS]--> API Gateway (8080)
 ---
 
 ## 6. Current Changes
+- **Testing Guide & Sequential Protocol (`docs/TEST.md`):** Created comprehensive end-to-end testing manual detailing environment checks, service startup, seed credentials, 6-stage sequential test pipeline (Playwright baseline -> Public auth -> Employee journey -> Manager approvals -> Admin/HR governance -> Security & RBAC boundary tests), cURL/Postman verification, and troubleshooting diagnostics.
+- **Tagline Modernization:** Replaced legacy "human capital" phrasing across index title, header badges, landing hero badges, sign-in/up copy, and documentation with clean, modern **Workforce & Leave Management** / **Workforce Operations** terminology.
 - **Rebranding to `EMS`:** Standardized product branding from legacy names to **`EMS`** across all UI components, templates, route guards, tests, scripts, and documentation (`README.md`, `microservices/README.md`, `employee-management-ui/README.md`, `PLAYWRIGHT/README.md`, `docs/PRD-TRACEABILITY.md`, `docs/openapi.json`).
 - **Single-Source Database Config:** Configured `microservices/database.yml` imported by all 4 persistence microservices; all 6 JARs packaged and running.
 - **Build & E2E Verification:** Clean Angular production build (`npm run build`, 0 errors). 16/16 passing Playwright E2E tests (`npx playwright test`).
@@ -95,4 +97,4 @@ Angular UI (4200) --[HTTP / HttpOnly JWT Cookie / CORS]--> API Gateway (8080)
 - **MySQL 8.0 (`employee_management_db`):** VERIFIED (Service `MySQL80`, port 3306).
 - **Microservices (6 Services):** VERIFIED & RUNNING (Eureka `8761`, Gateway `8080`, Employee `8081`, Attendance `8082`, Leave `8083`, Reports `8084`).
 - **Frontend Server:** VERIFIED & RUNNING (Angular 21 on `http://localhost:4200`; production build clean, 0 errors).
-- **Playwright Test Suite:** VERIFIED: 16/16 tests passing (100% pass rate in 25.2s).
+- **Playwright Test Suite:** VERIFIED: 16/16 tests passing (100% pass rate in 21.7s).

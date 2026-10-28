@@ -1,6 +1,6 @@
 # EMS — Frontend Single Page Application
 
-The web frontend for the **EMS** Enterprise Human Capital & Leave System, built using **Angular 21**, **NgRx**, and **Tailwind CSS 4**.
+The web frontend for the **EMS** Enterprise Workforce & Leave Management System, built using **Angular 21**, **NgRx**, and **Tailwind CSS 4**.
 
 ## Design Identity: Amber Walnut Morning
 

@@ -1,6 +1,6 @@
-# EMS — Enterprise Human Capital & Leave System
+# EMS — Enterprise Workforce & Leave Management
 
-An enterprise-grade, reactive microservices human capital management and leave tracking platform architected with **Java 17, Spring Boot 4.x, Spring WebFlux, Spring Cloud Gateway, Netflix Eureka, R2DBC MySQL, Angular 21, NgRx, Tailwind CSS 4, and Playwright**.
+An enterprise-grade, reactive microservices workforce and leave management platform architected with **Java 17, Spring Boot 4.x, Spring WebFlux, Spring Cloud Gateway, Netflix Eureka, R2DBC MySQL, Angular 21, NgRx, Tailwind CSS 4, and Playwright**.
 
 ---
 
@@ -177,9 +177,10 @@ The frontend is built on **Angular 21** using standalone components, reactive si
 
 ---
 
-## 7. Automated Playwright Test Suite
+## 7. Testing Suite & Comprehensive Testing Guide
 
-The repository includes a complete end-to-end Playwright test suite located in `PLAYWRIGHT/tests/`:
+- **Sequential Testing Manual:** For an exhaustive, step-by-step testing walkthrough across all roles (Employee, Manager, HR, Admin), refer to 📖 **[docs/TEST.md](docs/TEST.md)**.
+- **Automated Playwright Suite:** Located in `PLAYWRIGHT/tests/`:
 
 ### Test Coverage Summary (16 Tests — 100% Passing)
 - **`tests/auth.spec.ts` (5 tests):**
