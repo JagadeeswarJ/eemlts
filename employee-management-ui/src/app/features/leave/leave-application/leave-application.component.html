@@ -1,9 +1,9 @@
 <div class="max-w-2xl mx-auto space-y-6">
   <!-- Header -->
-  <div class="flex items-center gap-3 pb-4 border-b border-slate-200">
+  <div class="flex items-center gap-3 pb-4 border-b border-[#CCB499]/30">
     <a
       routerLink="/leaves"
-      class="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+      class="p-2 rounded-xl text-[#7D7067] hover:text-[#4A413C] hover:bg-[#CCB499]/20 transition-colors"
       title="Back to Leave Portal"
     >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -11,79 +11,79 @@
       </svg>
     </a>
     <div>
-      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Apply for Time Off</h2>
-      <p class="text-xs text-slate-500 mt-0.5">Submit a formal leave request for management review and balance deduction.</p>
+      <h2 class="text-xl sm:text-2xl font-bold text-[#4A413C] tracking-tight">Apply for Time Off</h2>
+      <p class="text-xs text-[#7D7067] mt-0.5">Submit a formal leave request for management review and balance deduction.</p>
     </div>
   </div>
 
   <!-- Form Card -->
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8">
+  <div class="card p-6 sm:p-8">
     <form [formGroup]="applyForm" (ngSubmit)="onSubmit()" class="space-y-5 text-xs" novalidate>
       <div>
-        <label for="leaveTypeId" class="block font-bold text-slate-700 mb-1">Leave Category <span class="text-rose-500">*</span></label>
+        <label for="leaveTypeId" class="block font-bold text-[#4A413C] mb-1">Leave Category <span class="text-[#A84A3B]">*</span></label>
         <select
           id="leaveTypeId"
           formControlName="leaveTypeId"
-          class="w-full px-3.5 py-2.5 border rounded-xl border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-          [ngClass]="applyForm.get('leaveTypeId')?.invalid && (applyForm.get('leaveTypeId')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+          class="w-full px-3.5 py-2.5 border rounded-xl border-[#CCB499]/60 bg-white text-[#4A413C] focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors"
+          [ngClass]="applyForm.get('leaveTypeId')?.invalid && (applyForm.get('leaveTypeId')?.touched || submitted) ? 'border-[#A84A3B] bg-[#A84A3B]/5' : 'border-[#CCB499]/60'"
         >
           <option value="">-- Choose Leave Category --</option>
           <option *ngFor="let t of types$ | async" [value]="t.leaveTypeId">
             {{ t.name }} (Annual Quota: {{ t.annualQuota }} days)
           </option>
         </select>
-        <div *ngIf="applyForm.get('leaveTypeId')?.invalid && (applyForm.get('leaveTypeId')?.touched || submitted)" class="text-[11px] text-rose-600 mt-1">
+        <div *ngIf="applyForm.get('leaveTypeId')?.invalid && (applyForm.get('leaveTypeId')?.touched || submitted)" class="text-[11px] text-[#A84A3B] mt-1">
           Please select a leave category.
         </div>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label for="startDate" class="block font-bold text-slate-700 mb-1">Start Date <span class="text-rose-500">*</span></label>
+          <label for="startDate" class="block font-bold text-[#4A413C] mb-1">Start Date <span class="text-[#A84A3B]">*</span></label>
           <input
             id="startDate"
             type="date"
             formControlName="startDate"
-            class="w-full px-3.5 py-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            class="w-full px-3.5 py-2.5 border rounded-xl border-[#CCB499]/60 text-[#4A413C] focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors bg-white"
           />
         </div>
         <div>
-          <label for="endDate" class="block font-bold text-slate-700 mb-1">End Date <span class="text-rose-500">*</span></label>
+          <label for="endDate" class="block font-bold text-[#4A413C] mb-1">End Date <span class="text-[#A84A3B]">*</span></label>
           <input
             id="endDate"
             type="date"
             formControlName="endDate"
-            class="w-full px-3.5 py-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            class="w-full px-3.5 py-2.5 border rounded-xl border-[#CCB499]/60 text-[#4A413C] focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors bg-white"
           />
         </div>
       </div>
 
       <div>
-        <label for="reason" class="block font-bold text-slate-700 mb-1">Reason for Absence <span class="text-rose-500">*</span></label>
+        <label for="reason" class="block font-bold text-[#4A413C] mb-1">Reason for Absence <span class="text-[#A84A3B]">*</span></label>
         <textarea
           id="reason"
           rows="4"
           formControlName="reason"
           placeholder="State the purpose or justification for your time-off..."
-          class="w-full px-3.5 py-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-          [ngClass]="applyForm.get('reason')?.invalid && (applyForm.get('reason')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+          class="w-full px-3.5 py-2.5 border rounded-xl border-[#CCB499]/60 text-[#4A413C] focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors bg-white"
+          [ngClass]="applyForm.get('reason')?.invalid && (applyForm.get('reason')?.touched || submitted) ? 'border-[#A84A3B] bg-[#A84A3B]/5' : 'border-[#CCB499]/60'"
         ></textarea>
-        <div *ngIf="applyForm.get('reason')?.invalid && (applyForm.get('reason')?.touched || submitted)" class="text-[11px] text-rose-600 mt-1">
+        <div *ngIf="applyForm.get('reason')?.invalid && (applyForm.get('reason')?.touched || submitted)" class="text-[11px] text-[#A84A3B] mt-1">
           Reason for leave request is required.
         </div>
       </div>
 
-      <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-[#CCB499]/20">
         <a
           routerLink="/leaves"
-          class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50 transition-colors"
+          class="px-5 py-2.5 rounded-xl border border-[#CCB499]/60 text-[#4A413C] font-semibold hover:bg-[#CCB499]/20 transition-colors"
         >
           Cancel
         </a>
         <button
           type="submit"
           [disabled]="applyForm.invalid || (loading$ | async)"
-          class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          class="btn-primary"
         >
           <span *ngIf="loading$ | async" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
           <span>Submit Request</span>

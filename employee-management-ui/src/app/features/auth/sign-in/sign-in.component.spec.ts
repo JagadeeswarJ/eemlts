@@ -38,9 +38,9 @@ describe('SignInComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should render WorkPulse branding and headings', () => {
+  it('should render EMS branding and headings', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain('WorkPulse');
+    expect(compiled.textContent).toContain('EMS');
     expect(compiled.textContent).toContain('Welcome back');
     expect(compiled.textContent).toContain('Enterprise HR Portal');
   });

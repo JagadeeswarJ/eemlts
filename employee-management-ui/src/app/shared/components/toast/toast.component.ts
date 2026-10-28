@@ -21,26 +21,26 @@ export class ToastComponent {
   getToastClass(type: string): string {
     switch (type) {
       case 'success':
-        return 'bg-emerald-50 text-emerald-800 border-emerald-200';
+        return 'bg-[#4E7D5B]/15 text-[#2C4E36] border-[#4E7D5B]/30 shadow-sm';
       case 'error':
-        return 'bg-rose-50 text-rose-800 border-rose-200';
+        return 'bg-[#A84A3B]/15 text-[#6D271D] border-[#A84A3B]/30 shadow-sm';
       case 'warning':
-        return 'bg-amber-50 text-amber-800 border-amber-200';
+        return 'bg-[#C8906D]/20 text-[#6B4226] border-[#C8906D]/40 shadow-sm';
       default:
-        return 'bg-blue-50 text-blue-800 border-blue-200';
+        return 'bg-[#CCB499]/30 text-[#4A413C] border-[#CCB499]/50 shadow-sm';
     }
   }
 
   getIconClass(type: string): string {
     switch (type) {
       case 'success':
-        return 'text-emerald-500';
+        return 'text-[#4E7D5B]';
       case 'error':
-        return 'text-rose-500';
+        return 'text-[#A84A3B]';
       case 'warning':
-        return 'text-amber-500';
+        return 'text-[#C8906D]';
       default:
-        return 'text-blue-500';
+        return 'text-[#BB6C43]';
     }
   }
 }

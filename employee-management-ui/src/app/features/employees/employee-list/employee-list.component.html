@@ -1,9 +1,9 @@
 <div class="space-y-6">
   <!-- Top Header with Actions -->
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E4DDD6]">
     <div>
-      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Employee Directory</h2>
-      <p class="text-xs text-slate-500 mt-0.5">
+      <h2 class="text-xl sm:text-2xl font-bold text-[#4A413C] tracking-tight font-display">Employee Directory</h2>
+      <p class="text-xs text-[#7A6F68] mt-0.5">
         Browse and manage organizational personnel, department allocations, and account statuses.
       </p>
     </div>
@@ -12,7 +12,7 @@
       <a
         *ngIf="user.role === 'ADMIN' || user.role === 'HR'"
         routerLink="/employees/new"
-        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors"
+        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#BB6C43] hover:bg-[#A85933] text-white font-bold text-xs shadow-xs transition-colors"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -23,10 +23,10 @@
   </div>
 
   <!-- Filters & Search Toolbar -->
-  <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-center gap-3">
+  <div class="bg-white p-4 rounded-2xl border border-[#E4DDD6] shadow-xs flex flex-col md:flex-row items-center gap-3">
     <!-- Search Input -->
     <div class="relative flex-1 w-full">
-      <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-4 h-4 text-[#7A6F68] absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
       </svg>
       <input
@@ -34,7 +34,7 @@
         [(ngModel)]="searchQuery"
         (input)="onSearch()"
         placeholder="Search employee by name, code, or email..."
-        class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+        class="w-full pl-10 pr-4 py-2 rounded-xl border border-[#E4DDD6] bg-[#FAF7F4] text-xs text-[#4A413C] placeholder-[#8D8078] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#BB6C43] transition-colors"
       />
     </div>
 
@@ -43,7 +43,7 @@
       <select
         [(ngModel)]="selectedDepartmentId"
         (change)="onFilterChange()"
-        class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="w-full px-3 py-2 rounded-xl border border-[#E4DDD6] bg-[#FAF7F4] text-xs text-[#4A413C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#BB6C43]"
       >
         <option value="">All Departments</option>
         <option *ngFor="let dept of departments$ | async" [value]="dept.departmentId">
@@ -57,7 +57,7 @@
       <select
         [(ngModel)]="selectedStatus"
         (change)="onFilterChange()"
-        class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="w-full px-3 py-2 rounded-xl border border-[#E4DDD6] bg-[#FAF7F4] text-xs text-[#4A413C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#BB6C43]"
       >
         <option value="">All Statuses</option>
         <option value="ACTIVE">Active Only</option>
@@ -71,7 +71,7 @@
     <button
       type="button"
       (click)="resetFilters()"
-      class="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors shrink-0"
+      class="px-3.5 py-2 rounded-xl border border-[#CCB499] text-xs font-semibold text-[#4A413C] bg-[#FAF7F4] hover:bg-white transition-colors shrink-0"
     >
       Reset
     </button>
@@ -89,18 +89,18 @@
     <button
       type="button"
       (click)="fetchEmployees()"
-      class="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl"
+      class="px-4 py-2 bg-[#BB6C43] text-white text-xs font-bold rounded-xl"
     >
       Retry Fetching
     </button>
   </div>
 
   <!-- Employees Table Card -->
-  <div *ngIf="!(loading$ | async) && !(error$ | async)" class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+  <div *ngIf="!(loading$ | async) && !(error$ | async)" class="bg-white rounded-2xl border border-[#E4DDD6] shadow-xs overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead>
-          <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+          <tr class="table-header">
             <th class="py-3 px-4">Employee</th>
             <th class="py-3 px-4">Department & Role</th>
             <th class="py-3 px-4">Reporting Manager</th>
@@ -108,19 +108,19 @@
             <th class="py-3 px-4 text-right">Actions</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
-          <tr *ngFor="let emp of employees$ | async" class="hover:bg-slate-50/70 transition-colors">
+        <tbody class="divide-y divide-[#E4DDD6] text-xs text-[#5F554F]">
+          <tr *ngFor="let emp of employees$ | async" class="hover:bg-[#FAF7F4] transition-colors">
             <!-- Employee Info -->
             <td class="py-3.5 px-4">
               <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0">
+                <div class="w-8 h-8 rounded-full bg-[#FBEFE9] text-[#BB6C43] border border-[#F0D4C5] font-bold text-xs flex items-center justify-center shrink-0">
                   {{ emp.firstName[0] }}{{ emp.lastName[0] }}
                 </div>
                 <div>
-                  <a [routerLink]="['/employees', emp.employeeId]" class="font-bold text-slate-900 hover:text-blue-600 transition-colors">
+                  <a [routerLink]="['/employees', emp.employeeId]" class="font-bold text-[#4A413C] hover:text-[#BB6C43] transition-colors">
                     {{ emp.fullName || (emp.firstName + ' ' + emp.lastName) }}
                   </a>
-                  <div class="flex items-center gap-1.5 text-[11px] text-slate-400 mt-0.5">
+                  <div class="flex items-center gap-1.5 text-[11px] text-[#7A6F68] mt-0.5">
                     <span class="font-mono">{{ emp.employeeCode }}</span>
                     <span>&bull;</span>
                     <span>{{ emp.email }}</span>
@@ -131,14 +131,14 @@
 
             <!-- Department & Designation -->
             <td class="py-3.5 px-4">
-              <span class="font-medium text-slate-800 block">{{ emp.designation }}</span>
-              <span class="text-[11px] text-slate-500">{{ emp.departmentName || 'General' }}</span>
+              <span class="font-medium text-[#4A413C] block">{{ emp.designation }}</span>
+              <span class="text-[11px] text-[#7A6F68]">{{ emp.departmentName || 'General' }}</span>
             </td>
 
             <!-- Reporting Manager -->
-            <td class="py-3.5 px-4 text-slate-600">
+            <td class="py-3.5 px-4 text-[#5F554F]">
               <span *ngIf="emp.managerName" class="font-medium">{{ emp.managerName }}</span>
-              <span *ngIf="!emp.managerName" class="text-slate-400 italic">None (Executive)</span>
+              <span *ngIf="!emp.managerName" class="text-[#7A6F68] italic">None (Executive)</span>
             </td>
 
             <!-- Status Badge -->
@@ -151,7 +151,7 @@
               <div class="flex items-center justify-end gap-1.5" *ngIf="currentUser$ | async as user">
                 <a
                   [routerLink]="['/employees', emp.employeeId]"
-                  class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  class="p-1.5 text-[#7A6F68] hover:text-[#BB6C43] hover:bg-[#FBEFE9] rounded-lg transition-colors"
                   title="View Profile"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +163,7 @@
                 <a
                   *ngIf="user.role === 'ADMIN' || user.role === 'HR'"
                   [routerLink]="['/employees', emp.employeeId, 'edit']"
-                  class="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                  class="p-1.5 text-[#7A6F68] hover:text-[#C8906D] hover:bg-[#F8EFEA] rounded-lg transition-colors"
                   title="Edit Record"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,7 +175,7 @@
                   *ngIf="(user.role === 'ADMIN' || user.role === 'HR') && emp.employmentStatus === 'ACTIVE'"
                   type="button"
                   (click)="onDeactivate(emp)"
-                  class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                  class="p-1.5 text-[#7A6F68] hover:text-[#B05335] hover:bg-[#FDF0EB] rounded-lg transition-colors"
                   title="Deactivate Account"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -190,11 +190,11 @@
           <tr *ngIf="(employees$ | async)?.length === 0">
             <td colspan="5" class="py-12 text-center">
               <div class="max-w-sm mx-auto space-y-2">
-                <svg class="w-10 h-10 text-slate-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-10 h-10 text-[#CCB499] mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                 </svg>
-                <p class="font-bold text-slate-700 text-sm">No employees match criteria</p>
-                <p class="text-xs text-slate-400">Try modifying search filters or clear existing criteria.</p>
+                <p class="font-bold text-[#4A413C] text-sm">No employees match criteria</p>
+                <p class="text-xs text-[#7A6F68]">Try modifying search filters or clear existing criteria.</p>
               </div>
             </td>
           </tr>
@@ -203,27 +203,27 @@
     </div>
 
     <!-- Pagination Footer -->
-    <div class="px-4 py-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500 bg-slate-50/50">
+    <div class="px-4 py-3 border-t border-[#E4DDD6] flex items-center justify-between text-xs text-[#7A6F68] bg-[#FAF7F4]">
       <span>
-        Total: <strong class="text-slate-800">{{ totalElements$ | async }}</strong> personnel registered
+        Total: <strong class="text-[#4A413C]">{{ totalElements$ | async }}</strong> personnel registered
       </span>
       <div class="flex items-center gap-2">
         <button
           type="button"
           (click)="onPageChange(currentPage - 1)"
           [disabled]="currentPage === 0"
-          class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          class="px-3 py-1.5 rounded-lg border border-[#CCB499] bg-white text-[#4A413C] hover:bg-[#FAF7F4] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           Previous
         </button>
-        <span class="font-medium text-slate-700">
+        <span class="font-medium text-[#4A413C]">
           Page {{ currentPage + 1 }} of {{ (totalPages$ | async) || 1 }}
         </span>
         <button
           type="button"
           (click)="onPageChange(currentPage + 1)"
           [disabled]="currentPage + 1 >= ((totalPages$ | async) || 1)"
-          class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          class="px-3 py-1.5 rounded-lg border border-[#CCB499] bg-white text-[#4A413C] hover:bg-[#FAF7F4] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           Next
         </button>

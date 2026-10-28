@@ -1,9 +1,9 @@
 <div class="max-w-4xl mx-auto space-y-6">
   <!-- Header with Back Button -->
-  <div class="flex items-center gap-3 pb-3 border-b border-slate-200">
+  <div class="flex items-center gap-3 pb-3 border-b border-[#E4DDD6]">
     <a
       routerLink="/employees"
-      class="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+      class="p-2 rounded-xl text-[#7A6F68] hover:text-[#4A413C] hover:bg-[#FAF7F4] transition-colors"
       title="Back to Employees"
     >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -11,10 +11,10 @@
       </svg>
     </a>
     <div>
-      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+      <h2 class="text-xl sm:text-2xl font-bold text-[#4A413C] tracking-tight font-display">
         {{ isEditMode ? 'Edit Employee Record' : 'Onboard New Employee' }}
       </h2>
-      <p class="text-xs text-slate-500 mt-0.5">
+      <p class="text-xs text-[#7A6F68] mt-0.5">
         {{ isEditMode ? 'Update employment details, department, or manager assignment.' : 'Fill in personnel and contact information to create an employee profile.' }}
       </p>
     </div>
@@ -30,10 +30,10 @@
   <!-- Department Lookup Warning / Retry Banner -->
   <div
     *ngIf="deptError$ | async as deptErr"
-    class="p-4 rounded-xl border border-amber-200 bg-amber-50 text-amber-900 flex items-center justify-between text-xs"
+    class="p-4 rounded-xl border border-[#F0D4C5] bg-[#FBEFE9] text-[#BB6C43] flex items-center justify-between text-xs"
   >
     <div class="flex items-center gap-2">
-      <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-4 h-4 text-[#BB6C43] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
       </svg>
       <span>Department lookup failed: {{ deptErr }}</span>
@@ -41,24 +41,24 @@
     <button
       type="button"
       (click)="retryLoadDepartments()"
-      class="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition-colors shrink-0"
+      class="px-3 py-1.5 rounded-lg bg-[#BB6C43] hover:bg-[#A85933] text-white font-bold text-xs transition-colors shrink-0"
     >
       Retry Lookup
     </button>
   </div>
 
   <!-- Main Card Form -->
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8">
+  <div class="bg-white rounded-2xl border border-[#E4DDD6] shadow-xs p-6 sm:p-8">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-8" novalidate>
       <!-- Section 1: Personal Details -->
       <div>
-        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 pb-1.5 border-b border-slate-100 flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+        <h4 class="text-xs font-bold text-[#4A413C] uppercase tracking-wider mb-4 pb-1.5 border-b border-[#E4DDD6] flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#BB6C43]"></span>
           1. Personal Information
         </h4>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label for="firstName" class="block text-xs font-bold text-slate-700 mb-1">First Name <span class="text-rose-500">*</span></label>
+            <label for="firstName" class="block text-xs font-bold text-[#4A413C] mb-1">First Name <span class="text-[#B05335]">*</span></label>
             <input
               id="firstName"
               type="text"
@@ -66,8 +66,8 @@
               placeholder="e.g. Sarah"
               [attr.aria-invalid]="form.get('firstName')?.invalid && (form.get('firstName')?.touched || submitted)"
               aria-describedby="firstName-error"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-              [ngClass]="form.get('firstName')?.invalid && (form.get('firstName')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors"
+              [ngClass]="form.get('firstName')?.invalid && (form.get('firstName')?.touched || submitted) ? 'border-[#B05335] bg-[#FDF0EB]' : 'border-[#E4DDD6]'"
             />
             <app-validation-message
               id="firstName-error"
@@ -78,7 +78,7 @@
           </div>
 
           <div>
-            <label for="lastName" class="block text-xs font-bold text-slate-700 mb-1">Last Name <span class="text-rose-500">*</span></label>
+            <label for="lastName" class="block text-xs font-bold text-[#4A413C] mb-1">Last Name <span class="text-[#B05335]">*</span></label>
             <input
               id="lastName"
               type="text"
@@ -86,8 +86,8 @@
               placeholder="e.g. Connor"
               [attr.aria-invalid]="form.get('lastName')?.invalid && (form.get('lastName')?.touched || submitted)"
               aria-describedby="lastName-error"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-              [ngClass]="form.get('lastName')?.invalid && (form.get('lastName')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors"
+              [ngClass]="form.get('lastName')?.invalid && (form.get('lastName')?.touched || submitted) ? 'border-[#B05335] bg-[#FDF0EB]' : 'border-[#E4DDD6]'"
             />
             <app-validation-message
               id="lastName-error"
@@ -98,7 +98,7 @@
           </div>
 
           <div>
-            <label for="email" class="block text-xs font-bold text-slate-700 mb-1">Work Email <span class="text-rose-500">*</span></label>
+            <label for="email" class="block text-xs font-bold text-[#4A413C] mb-1">Work Email <span class="text-[#B05335]">*</span></label>
             <input
               id="email"
               type="email"
@@ -107,8 +107,8 @@
               [readonly]="isEditMode"
               [attr.aria-invalid]="form.get('email')?.invalid && (form.get('email')?.touched || submitted)"
               aria-describedby="email-error"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-              [ngClass]="isEditMode ? 'bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed' : (form.get('email')?.invalid && (form.get('email')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300')"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors"
+              [ngClass]="isEditMode ? 'bg-[#ECEAE8] text-[#7A6F68] border-[#E4DDD6] cursor-not-allowed' : (form.get('email')?.invalid && (form.get('email')?.touched || submitted) ? 'border-[#B05335] bg-[#FDF0EB]' : 'border-[#E4DDD6] bg-[#FAF7F4] focus:bg-white')"
             />
             <app-validation-message
               id="email-error"
@@ -119,7 +119,7 @@
           </div>
 
           <div>
-            <label for="phone" class="block text-xs font-bold text-slate-700 mb-1">Phone Number <span class="text-rose-500">*</span></label>
+            <label for="phone" class="block text-xs font-bold text-[#4A413C] mb-1">Phone Number <span class="text-[#B05335]">*</span></label>
             <input
               id="phone"
               type="tel"
@@ -127,8 +127,8 @@
               placeholder="+1-555-0199"
               [attr.aria-invalid]="form.get('phone')?.invalid && (form.get('phone')?.touched || submitted)"
               aria-describedby="phone-error"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-              [ngClass]="form.get('phone')?.invalid && (form.get('phone')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors"
+              [ngClass]="form.get('phone')?.invalid && (form.get('phone')?.touched || submitted) ? 'border-[#B05335] bg-[#FDF0EB]' : 'border-[#E4DDD6]'"
             />
             <app-validation-message
               id="phone-error"
@@ -142,18 +142,18 @@
 
       <!-- Section 2: Department & Employment Role -->
       <div>
-        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 pb-1.5 border-b border-slate-100 flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+        <h4 class="text-xs font-bold text-[#4A413C] uppercase tracking-wider mb-4 pb-1.5 border-b border-[#E4DDD6] flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#BB6C43]"></span>
           2. Organizational Assignment & Department
         </h4>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <!-- Department Dropdown -->
           <div>
             <div class="flex items-center justify-between mb-1">
-              <label for="departmentId" class="block text-xs font-bold text-slate-700">
-                Department <span class="text-rose-500">*</span>
+              <label for="departmentId" class="block text-xs font-bold text-[#4A413C]">
+                Department <span class="text-[#B05335]">*</span>
               </label>
-              <span *ngIf="deptLoading$ | async" class="text-[10px] text-blue-600 animate-pulse font-medium">
+              <span *ngIf="deptLoading$ | async" class="text-[10px] text-[#BB6C43] animate-pulse font-medium">
                 Loading departments...
               </span>
             </div>
@@ -162,8 +162,8 @@
               formControlName="departmentId"
               [attr.aria-invalid]="form.get('departmentId')?.invalid && (form.get('departmentId')?.touched || submitted)"
               aria-describedby="departmentId-error"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-              [ngClass]="form.get('departmentId')?.invalid && (form.get('departmentId')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors"
+              [ngClass]="form.get('departmentId')?.invalid && (form.get('departmentId')?.touched || submitted) ? 'border-[#B05335] bg-[#FDF0EB]' : 'border-[#E4DDD6]'"
             >
               <option value="">-- Choose a Department --</option>
               <option *ngFor="let dept of departments$ | async" [value]="dept.departmentId">
@@ -180,7 +180,7 @@
 
           <!-- Designation / Title -->
           <div>
-            <label for="designation" class="block text-xs font-bold text-slate-700 mb-1">Job Designation <span class="text-rose-500">*</span></label>
+            <label for="designation" class="block text-xs font-bold text-[#4A413C] mb-1">Job Designation <span class="text-[#B05335]">*</span></label>
             <input
               id="designation"
               type="text"
@@ -188,8 +188,8 @@
               placeholder="e.g. Senior Software Engineer"
               [attr.aria-invalid]="form.get('designation')?.invalid && (form.get('designation')?.touched || submitted)"
               aria-describedby="designation-error"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-              [ngClass]="form.get('designation')?.invalid && (form.get('designation')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors"
+              [ngClass]="form.get('designation')?.invalid && (form.get('designation')?.touched || submitted) ? 'border-[#B05335] bg-[#FDF0EB]' : 'border-[#E4DDD6]'"
             />
             <app-validation-message
               id="designation-error"
@@ -201,7 +201,7 @@
 
           <!-- Joining Date -->
           <div>
-            <label for="joiningDate" class="block text-xs font-bold text-slate-700 mb-1">Joining Date <span class="text-rose-500">*</span></label>
+            <label for="joiningDate" class="block text-xs font-bold text-[#4A413C] mb-1">Joining Date <span class="text-[#B05335]">*</span></label>
             <input
               id="joiningDate"
               type="date"
@@ -209,8 +209,8 @@
               [readonly]="isEditMode"
               [attr.aria-invalid]="form.get('joiningDate')?.invalid && (form.get('joiningDate')?.touched || submitted)"
               aria-describedby="joiningDate-error"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-              [ngClass]="isEditMode ? 'bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed' : 'border-slate-300'"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-[#BB6C43] focus:outline-none transition-colors"
+              [ngClass]="isEditMode ? 'bg-[#ECEAE8] text-[#7A6F68] border-[#E4DDD6] cursor-not-allowed' : 'border-[#E4DDD6] bg-[#FAF7F4] focus:bg-white'"
             />
             <app-validation-message
               id="joiningDate-error"
@@ -222,11 +222,11 @@
 
           <!-- Reporting Manager Dropdown -->
           <div>
-            <label for="managerId" class="block text-xs font-bold text-slate-700 mb-1">Reporting Manager (Optional)</label>
+            <label for="managerId" class="block text-xs font-bold text-[#4A413C] mb-1">Reporting Manager (Optional)</label>
             <select
               id="managerId"
               formControlName="managerId"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none border-slate-300 transition-colors"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:outline-none border-[#E4DDD6] transition-colors"
             >
               <option [ngValue]="null">No Manager / Direct Leader</option>
               <option *ngFor="let mgr of availableManagers$ | async" [value]="mgr.employeeId">
@@ -237,11 +237,11 @@
 
           <!-- Role Selection (Creation mode only) -->
           <div *ngIf="!isEditMode">
-            <label for="role" class="block text-xs font-bold text-slate-700 mb-1">Security Role</label>
+            <label for="role" class="block text-xs font-bold text-[#4A413C] mb-1">Security Role</label>
             <select
               id="role"
               formControlName="role"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none border-slate-300"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:outline-none border-[#E4DDD6]"
             >
               <option value="EMPLOYEE">EMPLOYEE (Standard Self-Service)</option>
               <option value="MANAGER">MANAGER (Team Approvals & Reports)</option>
@@ -252,11 +252,11 @@
 
           <!-- Employment Status (Edit mode only) -->
           <div *ngIf="isEditMode">
-            <label for="employmentStatus" class="block text-xs font-bold text-slate-700 mb-1">Employment Status</label>
+            <label for="employmentStatus" class="block text-xs font-bold text-[#4A413C] mb-1">Employment Status</label>
             <select
               id="employmentStatus"
               formControlName="employmentStatus"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none border-slate-300"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:outline-none border-[#E4DDD6]"
             >
               <option value="ACTIVE">ACTIVE</option>
               <option value="INACTIVE">INACTIVE</option>
@@ -269,13 +269,13 @@
 
       <!-- Section 3: Contact Details & Emergency -->
       <div>
-        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 pb-1.5 border-b border-slate-100 flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+        <h4 class="text-xs font-bold text-[#4A413C] uppercase tracking-wider mb-4 pb-1.5 border-b border-[#E4DDD6] flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#BB6C43]"></span>
           3. Address & Emergency Contact
         </h4>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="sm:col-span-2">
-            <label for="address" class="block text-xs font-bold text-slate-700 mb-1">Residential Address <span class="text-rose-500">*</span></label>
+            <label for="address" class="block text-xs font-bold text-[#4A413C] mb-1">Residential Address <span class="text-[#B05335]">*</span></label>
             <input
               id="address"
               type="text"
@@ -283,8 +283,8 @@
               placeholder="e.g. 100 Main Street, Suite 400, Chicago, IL 60601"
               [attr.aria-invalid]="form.get('address')?.invalid && (form.get('address')?.touched || submitted)"
               aria-describedby="address-error"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-              [ngClass]="form.get('address')?.invalid && (form.get('address')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:outline-none transition-colors"
+              [ngClass]="form.get('address')?.invalid && (form.get('address')?.touched || submitted) ? 'border-[#B05335] bg-[#FDF0EB]' : 'border-[#E4DDD6]'"
             />
             <app-validation-message
               id="address-error"
@@ -295,7 +295,7 @@
           </div>
 
           <div class="sm:col-span-2">
-            <label for="emergencyContact" class="block text-xs font-bold text-slate-700 mb-1">Emergency Contact Information <span class="text-rose-500">*</span></label>
+            <label for="emergencyContact" class="block text-xs font-bold text-[#4A413C] mb-1">Emergency Contact Information <span class="text-[#B05335]">*</span></label>
             <input
               id="emergencyContact"
               type="text"
@@ -303,8 +303,8 @@
               placeholder="e.g. Jane Doe (Spouse) - +1-555-0188"
               [attr.aria-invalid]="form.get('emergencyContact')?.invalid && (form.get('emergencyContact')?.touched || submitted)"
               aria-describedby="emergencyContact-error"
-              class="w-full px-3.5 py-2.5 rounded-xl border text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-              [ngClass]="form.get('emergencyContact')?.invalid && (form.get('emergencyContact')?.touched || submitted) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-300'"
+              class="w-full px-3.5 py-2.5 rounded-xl border text-xs bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:outline-none transition-colors"
+              [ngClass]="form.get('emergencyContact')?.invalid && (form.get('emergencyContact')?.touched || submitted) ? 'border-[#B05335] bg-[#FDF0EB]' : 'border-[#E4DDD6]'"
             />
             <app-validation-message
               id="emergencyContact-error"
@@ -317,17 +317,17 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex items-center justify-end gap-3 pt-6 border-t border-slate-200">
+      <div class="flex items-center justify-end gap-3 pt-6 border-t border-[#E4DDD6]">
         <a
           routerLink="/employees"
-          class="px-5 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+          class="px-5 py-2.5 rounded-xl border border-[#CCB499] text-xs font-semibold text-[#4A413C] bg-[#FAF7F4] hover:bg-white transition-colors"
         >
           Cancel
         </a>
         <button
           type="submit"
           [disabled]="form.invalid || (loading$ | async)"
-          class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          class="px-6 py-2.5 rounded-xl bg-[#BB6C43] hover:bg-[#A85933] text-white font-bold text-xs shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           <span *ngIf="loading$ | async" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
           <span>{{ isEditMode ? 'Update Employee Record' : 'Save & Onboard Employee' }}</span>

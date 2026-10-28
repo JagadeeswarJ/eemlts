@@ -1,18 +1,32 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
+  /* Amber Walnut Morning Palette */
+  --color-canvas: #EBEFEE;
+  --color-sand: #CCB499;
+  --color-sand-light: #F4EFEA;
+  --color-terracotta: #C8906D;
+  --color-terracotta-light: #F7EFEA;
+  --color-amber: #BB6C43;
+  --color-amber-dark: #A15630;
+  --color-amber-light: #FBEFE9;
+  --color-walnut: #4A413C;
+  --color-walnut-muted: #7A6F68;
+
+  /* Primary scale mapped to Amber / Terracotta */
+  --color-primary-50: #FAF4F0;
+  --color-primary-100: #F3E5DC;
+  --color-primary-200: #E6C8B5;
+  --color-primary-300: #D8A98E;
+  --color-primary-400: #C8906D;
+  --color-primary-500: #BB6C43;
+  --color-primary-600: #A85933;
+  --color-primary-700: #8D4625;
+  --color-primary-800: #6B341B;
+  --color-primary-900: #4A413C;
 }
 
 /* Custom Scrollbar */
@@ -22,69 +36,145 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #EBEFEE;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
+  background: #CCB499;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #BB6C43;
 }
 
-/* Base Utility Classes */
+/* Base Component Classes */
 .card {
-  background-color: #ffffff;
-  border-radius: 0.75rem;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
-  transition: all 0.2s ease-in-out;
+  background-color: #FFFFFF;
+  border-radius: 1rem;
+  border: 1px solid #E4DDD6;
+  box-shadow: 0 1px 3px 0 rgba(74, 65, 60, 0.04), 0 2px 8px -2px rgba(74, 65, 60, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card:hover {
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+  border-color: #CCB499;
+  box-shadow: 0 4px 12px -2px rgba(74, 65, 60, 0.08);
+}
+
+.card-warm {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FAF7F4 100%);
+  border: 1px solid #CCB499;
+  border-radius: 1rem;
 }
 
 .table-header {
-  background-color: #f8fafc;
-  color: #475569;
-  font-weight: 600;
+  background-color: #F8F5F2;
+  color: #4A413C;
+  font-weight: 700;
   text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #E8E2DC;
 }
 
 .btn-primary {
-  background-color: #2563eb;
-  color: #ffffff;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
+  background-color: #BB6C43;
+  color: #FFFFFF;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.625rem;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  transition: background-color 0.15s ease-in-out;
+  transition: all 0.15s ease-in-out;
+  border: 1px solid #A85933;
+  box-shadow: 0 1px 2px 0 rgba(187, 108, 67, 0.2);
 }
 
 .btn-primary:hover {
-  background-color: #1d4ed8;
+  background-color: #A85933;
+  box-shadow: 0 4px 8px 0 rgba(187, 108, 67, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  background-color: #8D4625;
+  transform: translateY(0);
 }
 
 .btn-secondary {
-  background-color: #f1f5f9;
-  color: #334155;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
+  background-color: #F8F5F2;
+  color: #4A413C;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.625rem;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid #cbd5e1;
-  transition: background-color 0.15s ease-in-out;
+  border: 1px solid #CCB499;
+  transition: all 0.15s ease-in-out;
 }
 
 .btn-secondary:hover {
-  background-color: #e2e8f0;
+  background-color: #EFE9E2;
+  border-color: #BB6C43;
+  color: #BB6C43;
+}
+
+.btn-terracotta {
+  background-color: #C8906D;
+  color: #FFFFFF;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.625rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #B87E5A;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-terracotta:hover {
+  background-color: #B87E5A;
+}
+
+.badge-amber {
+  background-color: #FBEFE9;
+  color: #BB6C43;
+  border: 1px solid #F0D4C5;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+}
+
+.badge-terracotta {
+  background-color: #F8EFEA;
+  color: #C8906D;
+  border: 1px solid #EBD5C6;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+}
+
+.badge-sand {
+  background-color: #F7F3EE;
+  color: #7D6B58;
+  border: 1px solid #E3D7C9;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+}
+
+.badge-walnut {
+  background-color: #ECEAE8;
+  color: #4A413C;
+  border: 1px solid #D8D2CD;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
 }

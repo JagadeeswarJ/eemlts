@@ -22,7 +22,7 @@ describe('SignUpComponent', () => {
   it('should create and render account access guidance', () => {
     expect(component).toBeTruthy();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain('WorkPulse Account Access');
+    expect(compiled.textContent).toContain('EMS Account Access');
     expect(compiled.textContent).toContain('Organization-Provisioned Accounts');
   });
 

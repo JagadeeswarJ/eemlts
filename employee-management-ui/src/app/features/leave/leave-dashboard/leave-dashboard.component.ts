@@ -58,47 +58,40 @@ export class LeaveDashboardComponent implements OnInit {
   currentPage = 0;
 
   applyForm = this.fb.group({
-    leaveTypeId: ['', [Validators.required]],
-    startDate: [new Date().toISOString().substring(0, 10), [Validators.required]],
-    endDate: [new Date().toISOString().substring(0, 10), [Validators.required]],
-    reason: ['', [Validators.required]],
+    leaveTypeId: ['', Validators.required],
+    startDate: ['', Validators.required],
+    endDate: ['', Validators.required],
+    reason: ['', [Validators.required, Validators.minLength(5)]],
   });
 
   ngOnInit(): void {
-    this.currentPage$.subscribe((p) => {
-      this.currentPage = p;
-    });
-
     this.store.dispatch(loadLeaveTypes());
-    this.store.dispatch(loadLeaveBalances({ year: 2026 }));
-    this.fetchHistory(0);
+    this.store.dispatch(loadLeaveBalances({}));
+    this.loadHistory();
 
     this.statusFilterControl.valueChanges.subscribe(() => {
-      this.fetchHistory(0);
+      this.currentPage = 0;
+      this.loadHistory();
     });
 
     this.store.select(selectLeaveActionSuccess).subscribe((success) => {
       if (success) {
         this.showApplyModal = false;
-        this.applyForm.reset({
-          startDate: new Date().toISOString().substring(0, 10),
-          endDate: new Date().toISOString().substring(0, 10),
-        });
-        this.notificationService.success('Leave operation processed successfully.');
-        this.store.dispatch(loadLeaveBalances({ year: 2026 }));
-        this.fetchHistory(0);
+        this.applyForm.reset();
+        this.store.dispatch(loadLeaveBalances({}));
+        this.loadHistory();
       }
     });
   }
 
-  fetchHistory(page: number): void {
-    const status = this.statusFilterControl.value;
+  loadHistory(): void {
+    const statusVal = this.statusFilterControl.value;
     this.store.dispatch(
       loadLeaveHistory({
         params: {
-          status: status || undefined,
-          page,
+          page: this.currentPage,
           size: 10,
+          status: statusVal && statusVal !== 'ALL' ? statusVal : undefined,
         },
       })
     );
@@ -106,12 +99,14 @@ export class LeaveDashboardComponent implements OnInit {
 
   onPrevPage(): void {
     if (this.currentPage > 0) {
-      this.fetchHistory(this.currentPage - 1);
+      this.currentPage--;
+      this.loadHistory();
     }
   }
 
   onNextPage(): void {
-    this.fetchHistory(this.currentPage + 1);
+    this.currentPage++;
+    this.loadHistory();
   }
 
   onApplySubmit(): void {
@@ -146,13 +141,13 @@ export class LeaveDashboardComponent implements OnInit {
   getBalanceBorder(code: string): string {
     switch (code) {
       case 'CASUAL':
-        return 'border-blue-500';
+        return 'border-[#BB6C43]';
       case 'SICK':
-        return 'border-rose-500';
+        return 'border-[#C8906D]';
       case 'EARNED':
-        return 'border-emerald-500';
+        return 'border-[#2F6848]';
       default:
-        return 'border-slate-400';
+        return 'border-[#CCB499]';
     }
   }
 }

@@ -16,13 +16,13 @@ export class AlertComponent {
   get containerClass(): string {
     switch (this.type) {
       case 'success':
-        return 'bg-emerald-50 text-emerald-800 border-emerald-200';
+        return 'bg-[#EAF2ED] text-[#245239] border-[#C2D8CB]';
       case 'error':
-        return 'bg-rose-50 text-rose-800 border-rose-200';
+        return 'bg-[#FDF0EB] text-[#A64426] border-[#F2C5B4]';
       case 'warning':
-        return 'bg-amber-50 text-amber-800 border-amber-200';
+        return 'bg-[#FBEFE9] text-[#BB6C43] border-[#F0D4C5]';
       default:
-        return 'bg-blue-50 text-blue-800 border-blue-200';
+        return 'bg-[#F7F3EE] text-[#4A413C] border-[#CCB499]';
     }
   }
 }

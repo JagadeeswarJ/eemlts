@@ -2,7 +2,7 @@
 setlocal EnableDelayedExpansion
 
 echo ==========================================
-echo   Starting all WorkPulse microservices
+echo   Starting all EMS microservices
 echo ==========================================
 echo.
 

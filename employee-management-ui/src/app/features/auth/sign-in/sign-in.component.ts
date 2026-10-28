@@ -32,11 +32,11 @@ export class SignInComponent {
   submitted = signal(false);
 
   form: FormGroup<SignInForm> = this.fb.group({
-    email: new FormControl('alex.jones@company.com', {
+    email: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.email],
     }),
-    password: new FormControl('Password123!', {
+    password: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(6)],
     }),
@@ -58,13 +58,9 @@ export class SignInComponent {
       this.form.controls.email.setValue(rawEmail.trim());
     }
 
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
+    if (this.form.valid) {
+      const { email, password } = this.form.getRawValue();
+      this.store.dispatch(login({ request: { email: email.trim(), password } }));
     }
-
-    const email = this.form.controls.email.value.trim();
-    const password = this.form.controls.password.value;
-    this.store.dispatch(login({ request: { email, password } }));
   }
 }

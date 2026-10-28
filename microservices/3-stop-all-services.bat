@@ -2,7 +2,7 @@
 setlocal EnableDelayedExpansion
 
 echo ==========================================
-echo   Stopping all WorkPulse microservices
+echo   Stopping all EMS microservices
 echo ==========================================
 echo.
 

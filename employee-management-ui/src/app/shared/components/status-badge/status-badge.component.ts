@@ -19,21 +19,20 @@ export class StatusBadgeComponent {
       case 'APPROVED':
       case 'ACTIVE':
       case 'SENT':
-        return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+        return 'bg-[#EAF2ED] text-[#2F6848] border border-[#CFDFD4]';
       case 'PENDING':
       case 'HALF_DAY':
-        return 'bg-amber-50 text-amber-700 border border-amber-200';
+        return 'bg-[#FBEFE9] text-[#BB6C43] border border-[#F0D4C5]';
       case 'REJECTED':
       case 'ABSENT':
       case 'TERMINATED':
-      case 'INACTIVE':
       case 'FAILED':
-        return 'bg-rose-50 text-rose-700 border border-rose-200';
+        return 'bg-[#F9ECE7] text-[#B05335] border border-[#ECCDC3]';
       case 'ON_LEAVE':
       case 'CANCELLED':
-        return 'bg-indigo-50 text-indigo-700 border border-indigo-200';
+        return 'bg-[#F5EFE9] text-[#7A624E] border border-[#DFD3C4]';
       default:
-        return 'bg-slate-100 text-slate-700 border border-slate-200';
+        return 'bg-[#ECEAE8] text-[#4A413C] border border-[#D8D2CD]';
     }
   }
 
@@ -44,21 +43,20 @@ export class StatusBadgeComponent {
       case 'APPROVED':
       case 'ACTIVE':
       case 'SENT':
-        return 'bg-emerald-500';
+        return 'bg-[#2F6848]';
       case 'PENDING':
       case 'HALF_DAY':
-        return 'bg-amber-500';
+        return 'bg-[#BB6C43]';
       case 'REJECTED':
       case 'ABSENT':
       case 'TERMINATED':
-      case 'INACTIVE':
       case 'FAILED':
-        return 'bg-rose-500';
+        return 'bg-[#B05335]';
       case 'ON_LEAVE':
       case 'CANCELLED':
-        return 'bg-indigo-500';
+        return 'bg-[#7A624E]';
       default:
-        return 'bg-slate-500';
+        return 'bg-[#7A6F68]';
     }
   }
 }

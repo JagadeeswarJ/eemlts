@@ -1,9 +1,9 @@
-﻿import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('Authentication & Access Control Flows', () => {
   test('Landing page loads with hero elements and navigation to Sign-In', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/WorkPulse|Employee/i);
+    await expect(page).toHaveTitle(/EMS/i);
     // Click Sign In button or navigate
     const signInBtn = page.locator('a[routerLink="/sign-in"], a[href="/sign-in"]').first();
     await expect(signInBtn).toBeVisible();

@@ -1,13 +1,13 @@
-<div class="h-screen w-screen overflow-hidden flex bg-slate-50">
+<div class="h-screen w-screen overflow-hidden flex bg-[#EBEFEE]">
   <!-- Desktop Fixed Sidebar -->
-  <div class="hidden lg:flex shrink-0 h-full">
+  <div class="hidden lg:flex shrink-0 h-full shadow-lg z-20">
     <app-sidebar></app-sidebar>
   </div>
 
   <!-- Mobile Drawer Overlay -->
   <div *ngIf="sidebarOpen" class="fixed inset-0 z-50 lg:hidden flex">
-    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs" (click)="sidebarOpen = false"></div>
-    <div class="relative flex-1 flex flex-col max-w-xs w-full bg-slate-900 z-50 h-full">
+    <div class="fixed inset-0 bg-[#4A413C]/60 backdrop-blur-xs" (click)="sidebarOpen = false"></div>
+    <div class="relative flex-1 flex flex-col max-w-xs w-full bg-[#3E3530] z-50 h-full shadow-2xl">
       <app-sidebar></app-sidebar>
     </div>
   </div>

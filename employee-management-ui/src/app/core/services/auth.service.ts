@@ -15,6 +15,16 @@ export class AuthService {
       tap((res) => {
         if (res.success && res.data && typeof window !== 'undefined') {
           localStorage.setItem('emp_access_token', res.data.accessToken);
+          localStorage.setItem(
+            'emp_user_profile',
+            JSON.stringify({
+              userId: res.data.userId,
+              employeeId: res.data.employeeId,
+              email: res.data.email,
+              role: res.data.role,
+              fullName: res.data.fullName,
+            })
+          );
         }
       })
     );

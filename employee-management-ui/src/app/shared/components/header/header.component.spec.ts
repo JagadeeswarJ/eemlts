@@ -40,9 +40,9 @@ describe('HeaderComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should render WorkPulse brand and current user details', () => {
+  it('should render EMS brand and current user details', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain('WorkPulse');
+    expect(compiled.textContent).toContain('EMS');
     expect(compiled.textContent).toContain('Alex Jones');
     expect(compiled.textContent).toContain('EMPLOYEE');
   });

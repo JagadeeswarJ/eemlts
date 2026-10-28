@@ -1,14 +1,14 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "WorkPulse - Employee Management & Leave Tracking System API",
+    "title": "EMS - Employee Management & Leave Tracking System API",
     "version": "1.0.0",
-    "description": "Production-grade reactive microservices REST API for WorkPulse. Enforces role-based access control, trusted-header propagation, immutable audit trails, and strict server-side validation."
+    "description": "Production-grade reactive microservices REST API for EMS. Enforces role-based access control, trusted-header propagation, immutable audit trails, and strict server-side validation."
   },
   "servers": [
     {
       "url": "http://localhost:8080",
-      "description": "WorkPulse API Gateway"
+      "description": "EMS API Gateway"
     }
   ],
   "paths": {

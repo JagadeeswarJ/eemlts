@@ -1,27 +1,27 @@
 <div class="space-y-6">
   <!-- Top Navigation & Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E4DDD6]">
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <a routerLink="/leave-configuration" class="text-xs text-blue-600 hover:underline font-bold flex items-center gap-1">
+        <a routerLink="/leave-configuration" class="text-xs text-[#BB6C43] hover:underline font-bold flex items-center gap-1">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
           </svg>
           Leave Configuration
         </a>
-        <span class="text-slate-400 text-xs">/</span>
-        <span class="text-xs text-slate-500 font-medium">Employee Quota Allocations</span>
+        <span class="text-[#CCB499] text-xs">/</span>
+        <span class="text-xs text-[#7A6F68] font-medium">Employee Quota Allocations</span>
       </div>
-      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Employee Leave Allocations</h2>
-      <p class="text-xs text-slate-500 mt-0.5">Manage and adjust individual employee leave entitlements with immutable audit reasons.</p>
+      <h2 class="text-xl sm:text-2xl font-bold text-[#4A413C] tracking-tight font-display">Employee Leave Allocations</h2>
+      <p class="text-xs text-[#7A6F68] mt-0.5">Manage and adjust individual employee leave entitlements with immutable audit reasons.</p>
     </div>
 
     <!-- View Mode Switcher -->
-    <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+    <div class="inline-flex rounded-xl bg-[#FAF7F4] p-1 border border-[#E4DDD6]">
       <button
         type="button"
         (click)="activeView = 'balances'"
-        [ngClass]="activeView === 'balances' ? 'bg-white shadow-xs font-bold text-blue-700' : 'text-slate-600 hover:text-slate-900'"
+        [ngClass]="activeView === 'balances' ? 'bg-[#BB6C43] shadow-xs font-bold text-white' : 'text-[#7A6F68] hover:text-[#4A413C]'"
         class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
       >
         Employee Balances
@@ -29,7 +29,7 @@
       <button
         type="button"
         (click)="loadAuditLogs(); activeView = 'history'"
-        [ngClass]="activeView === 'history' ? 'bg-white shadow-xs font-bold text-blue-700' : 'text-slate-600 hover:text-slate-900'"
+        [ngClass]="activeView === 'history' ? 'bg-[#BB6C43] shadow-xs font-bold text-white' : 'text-[#7A6F68] hover:text-[#4A413C]'"
         class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
       >
         Adjustment History
@@ -40,9 +40,9 @@
   <!-- Balances View -->
   <ng-container *ngIf="activeView === 'balances'">
     <!-- Search & Filter Bar -->
-    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-wrap items-center gap-3">
+    <div class="bg-white p-4 rounded-2xl border border-[#E4DDD6] shadow-xs flex flex-wrap items-center gap-3">
       <div class="relative flex-1 min-w-[200px]">
-        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 text-[#7A6F68] absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
         </svg>
         <input
@@ -50,7 +50,7 @@
           [(ngModel)]="searchQuery"
           (input)="onFilterChange()"
           placeholder="Search by employee name or code..."
-          class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-full pl-10 pr-4 py-2 rounded-xl border border-[#E4DDD6] bg-[#FAF7F4] text-xs text-[#4A413C] placeholder-[#8D8078] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#BB6C43]"
         />
       </div>
 
@@ -58,7 +58,7 @@
         <select
           [(ngModel)]="selectedYear"
           (change)="onFilterChange()"
-          class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-full px-3 py-2 rounded-xl border border-[#E4DDD6] bg-[#FAF7F4] text-xs text-[#4A413C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#BB6C43]"
         >
           <option [value]="2025">Year 2025</option>
           <option [value]="2026">Year 2026</option>
@@ -70,7 +70,7 @@
         <select
           [(ngModel)]="selectedDepartmentId"
           (change)="onFilterChange()"
-          class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-full px-3 py-2 rounded-xl border border-[#E4DDD6] bg-[#FAF7F4] text-xs text-[#4A413C] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#BB6C43]"
         >
           <option [ngValue]="null">All Departments</option>
           <option *ngFor="let d of departments" [value]="d.departmentId">{{ d.name }}</option>
@@ -80,7 +80,7 @@
       <button
         type="button"
         (click)="resetFilters()"
-        class="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+        class="px-3.5 py-2 rounded-xl border border-[#CCB499] text-xs font-semibold text-[#4A413C] bg-[#FAF7F4] hover:bg-white transition-colors"
       >
         Reset
       </button>
@@ -99,18 +99,18 @@
       <button
         type="button"
         (click)="fetchBalances()"
-        class="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl"
+        class="px-4 py-2 bg-[#BB6C43] text-white text-xs font-bold rounded-xl"
       >
         Retry Fetching
       </button>
     </div>
 
     <!-- Allocations Table -->
-    <div *ngIf="!loading && !errorMessage" class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+    <div *ngIf="!loading && !errorMessage" class="bg-white rounded-2xl border border-[#E4DDD6] shadow-xs overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs border-collapse">
           <thead>
-            <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+            <tr class="table-header">
               <th class="p-3.5">Employee</th>
               <th class="p-3.5">Department</th>
               <th class="p-3.5">Leave Type</th>
@@ -122,24 +122,24 @@
               <th class="p-3.5 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100 text-slate-700">
-            <tr *ngFor="let b of balances" class="hover:bg-slate-50/70 transition-colors">
+          <tbody class="divide-y divide-[#E4DDD6] text-[#5F554F]">
+            <tr *ngFor="let b of balances" class="hover:bg-[#FAF7F4] transition-colors">
               <td class="p-3.5">
-                <div class="font-bold text-slate-900">{{ b.employeeName }}</div>
-                <div class="font-mono text-[10px] text-slate-400">{{ b.employeeCode }}</div>
+                <div class="font-bold text-[#4A413C]">{{ b.employeeName }}</div>
+                <div class="font-mono text-[10px] text-[#7A6F68]">{{ b.employeeCode }}</div>
               </td>
-              <td class="p-3.5 text-slate-600">{{ b.departmentName }}</td>
-              <td class="p-3.5 font-semibold text-slate-800">{{ b.leaveTypeName }}</td>
-              <td class="p-3.5 font-mono text-slate-600 font-bold">{{ b.year }}</td>
-              <td class="p-3.5 font-extrabold text-slate-900">{{ b.totalDays }} days</td>
-              <td class="p-3.5 font-bold text-rose-600">{{ b.usedDays }}</td>
-              <td class="p-3.5 font-bold text-amber-600">{{ b.pendingDays }}</td>
-              <td class="p-3.5 font-extrabold text-emerald-700 bg-emerald-50/50">{{ b.availableDays }} days</td>
+              <td class="p-3.5 text-[#5F554F]">{{ b.departmentName }}</td>
+              <td class="p-3.5 font-semibold text-[#4A413C]">{{ b.leaveTypeName }}</td>
+              <td class="p-3.5 font-mono text-[#5F554F] font-bold">{{ b.year }}</td>
+              <td class="p-3.5 font-extrabold text-[#4A413C]">{{ b.totalDays }} days</td>
+              <td class="p-3.5 font-bold text-[#B05335]">{{ b.usedDays }}</td>
+              <td class="p-3.5 font-bold text-[#BB6C43]">{{ b.pendingDays }}</td>
+              <td class="p-3.5 font-extrabold text-[#2F6848] bg-[#EAF2ED]/50">{{ b.availableDays }} days</td>
               <td class="p-3.5 text-right">
                 <button
                   type="button"
                   (click)="openAdjustModal(b)"
-                  class="px-3 py-1.5 rounded-lg border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold text-[11px] transition-colors"
+                  class="px-3 py-1.5 rounded-lg border border-[#F0D4C5] bg-[#FBEFE9] text-[#BB6C43] hover:bg-[#F3E5DC] font-bold text-[11px] transition-colors"
                 >
                   Adjust Quota
                 </button>
@@ -147,7 +147,7 @@
             </tr>
 
             <tr *ngIf="balances.length === 0">
-              <td colspan="9" class="p-10 text-center text-slate-400 text-xs">
+              <td colspan="9" class="p-10 text-center text-[#7A6F68] text-xs">
                 No leave allocations found for selected criteria.
               </td>
             </tr>
@@ -156,17 +156,17 @@
       </div>
 
       <!-- Pagination -->
-      <div class="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 bg-slate-50/50">
+      <div class="p-4 border-t border-[#E4DDD6] flex items-center justify-between text-xs text-[#7A6F68] bg-[#FAF7F4]">
         <span>
-          Page <strong class="text-slate-800">{{ currentPage + 1 }}</strong> of <strong class="text-slate-800">{{ totalPages || 1 }}</strong>
-          &bull; Total Elements: <strong class="text-slate-800">{{ totalElements }}</strong>
+          Page <strong class="text-[#4A413C]">{{ currentPage + 1 }}</strong> of <strong class="text-[#4A413C]">{{ totalPages || 1 }}</strong>
+          &bull; Total Elements: <strong class="text-[#4A413C]">{{ totalElements }}</strong>
         </span>
         <div class="flex items-center gap-2">
           <button
             type="button"
             [disabled]="currentPage === 0"
             (click)="onPageChange(currentPage - 1)"
-            class="px-3.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-slate-700"
+            class="px-3.5 py-1.5 rounded-lg border border-[#CCB499] bg-white hover:bg-[#FAF7F4] disabled:opacity-40 disabled:cursor-not-allowed font-medium text-[#4A413C]"
           >
             Previous
           </button>
@@ -174,7 +174,7 @@
             type="button"
             [disabled]="(currentPage + 1) >= totalPages"
             (click)="onPageChange(currentPage + 1)"
-            class="px-3.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-slate-700"
+            class="px-3.5 py-1.5 rounded-lg border border-[#CCB499] bg-white hover:bg-[#FAF7F4] disabled:opacity-40 disabled:cursor-not-allowed font-medium text-[#4A413C]"
           >
             Next
           </button>
@@ -185,16 +185,16 @@
 
   <!-- Adjustment Audit History View -->
   <ng-container *ngIf="activeView === 'history'">
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-      <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+    <div class="bg-white rounded-2xl border border-[#E4DDD6] shadow-xs overflow-hidden">
+      <div class="p-4 border-b border-[#E4DDD6] flex items-center justify-between bg-[#FAF7F4]">
         <div>
-          <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Allocation Audit Trail</h3>
-          <p class="text-[11px] text-slate-500">Immutable record of administrative quota adjustments with mandatory justification.</p>
+          <h3 class="text-xs font-bold text-[#4A413C] uppercase tracking-wider font-display">Allocation Audit Trail</h3>
+          <p class="text-[11px] text-[#7A6F68]">Immutable record of administrative quota adjustments with mandatory justification.</p>
         </div>
         <button
           type="button"
           (click)="loadAuditLogs()"
-          class="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-white"
+          class="px-3 py-1.5 border border-[#CCB499] bg-white rounded-lg text-xs font-semibold text-[#4A413C] hover:bg-[#FAF7F4]"
         >
           Refresh Audit Logs
         </button>
@@ -203,7 +203,7 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs border-collapse">
           <thead>
-            <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+            <tr class="table-header">
               <th class="p-3.5">Timestamp</th>
               <th class="p-3.5">Employee</th>
               <th class="p-3.5">Leave Type</th>
@@ -214,23 +214,23 @@
               <th class="p-3.5">Performed By</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100 text-slate-700">
-            <tr *ngFor="let log of auditLogs" class="hover:bg-slate-50/70 transition-colors">
-              <td class="p-3.5 font-mono text-[11px] text-slate-500">{{ log.performedAt | date:'medium' }}</td>
+          <tbody class="divide-y divide-[#E4DDD6] text-[#5F554F]">
+            <tr *ngFor="let log of auditLogs" class="hover:bg-[#FAF7F4] transition-colors">
+              <td class="p-3.5 font-mono text-[11px] text-[#7A6F68]">{{ log.performedAt | date:'medium' }}</td>
               <td class="p-3.5">
-                <span class="font-bold text-slate-900">{{ log.employeeName }}</span>
-                <span class="font-mono text-slate-400 ml-1">({{ log.employeeCode }})</span>
+                <span class="font-bold text-[#4A413C]">{{ log.employeeName }}</span>
+                <span class="font-mono text-[#7A6F68] ml-1">({{ log.employeeCode }})</span>
               </td>
-              <td class="p-3.5 font-semibold text-slate-800">{{ log.leaveTypeName }}</td>
+              <td class="p-3.5 font-semibold text-[#4A413C]">{{ log.leaveTypeName }}</td>
               <td class="p-3.5 font-bold font-mono">{{ log.year }}</td>
-              <td class="p-3.5 font-semibold text-slate-500">{{ log.previousTotal }} days</td>
-              <td class="p-3.5 font-bold text-blue-700">{{ log.newTotal }} days</td>
-              <td class="p-3.5 text-slate-600 max-w-sm">{{ log.reason }}</td>
-              <td class="p-3.5 text-slate-800 font-mono text-[11px]">{{ log.performedBy }}</td>
+              <td class="p-3.5 font-semibold text-[#7A6F68]">{{ log.previousTotal }} days</td>
+              <td class="p-3.5 font-bold text-[#BB6C43]">{{ log.newTotal }} days</td>
+              <td class="p-3.5 text-[#5F554F] max-w-sm">{{ log.reason }}</td>
+              <td class="p-3.5 text-[#4A413C] font-mono text-[11px]">{{ log.performedBy }}</td>
             </tr>
 
             <tr *ngIf="auditLogs.length === 0">
-              <td colspan="8" class="p-10 text-center text-slate-400 text-xs">
+              <td colspan="8" class="p-10 text-center text-[#7A6F68] text-xs">
                 No leave quota adjustments have been recorded yet.
               </td>
             </tr>
@@ -242,16 +242,16 @@
 
   <!-- Adjust Allocation Modal -->
   <div *ngIf="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs" (click)="showModal = false"></div>
-    <div class="relative bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl z-10 space-y-4 border border-slate-200">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+    <div class="fixed inset-0 bg-[#4A413C]/50 backdrop-blur-xs" (click)="showModal = false"></div>
+    <div class="relative bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl z-10 space-y-4 border border-[#E4DDD6]">
+      <div class="flex items-center justify-between border-b border-[#E4DDD6] pb-3">
         <div>
-          <h3 class="text-base font-bold text-slate-900">Adjust Leave Quota Allocation</h3>
-          <p class="text-xs text-slate-500" *ngIf="selectedBalance">
+          <h3 class="text-base font-bold text-[#4A413C] font-display">Adjust Leave Quota Allocation</h3>
+          <p class="text-xs text-[#7A6F68]" *ngIf="selectedBalance">
             {{ selectedBalance.employeeName }} &bull; {{ selectedBalance.leaveTypeName }} ({{ selectedBalance.year }})
           </p>
         </div>
-        <button type="button" (click)="showModal = false" class="text-slate-400 hover:text-slate-600 p-1">
+        <button type="button" (click)="showModal = false" class="text-[#7A6F68] hover:text-[#4A413C] p-1">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
@@ -259,25 +259,25 @@
       </div>
 
       <!-- Current Quota Information Cards -->
-      <div class="grid grid-cols-3 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 text-center" *ngIf="selectedBalance">
+      <div class="grid grid-cols-3 gap-3 p-3 bg-[#FAF7F4] rounded-xl border border-[#E4DDD6] text-center" *ngIf="selectedBalance">
         <div>
-          <span class="text-[10px] uppercase font-bold text-slate-400 block">Current Total</span>
-          <span class="text-sm font-extrabold text-slate-900">{{ selectedBalance.totalDays }}</span>
+          <span class="text-[10px] uppercase font-bold text-[#7A6F68] block">Current Total</span>
+          <span class="text-sm font-extrabold text-[#4A413C]">{{ selectedBalance.totalDays }}</span>
         </div>
         <div>
-          <span class="text-[10px] uppercase font-bold text-slate-400 block">Used Days</span>
-          <span class="text-sm font-extrabold text-rose-600">{{ selectedBalance.usedDays }}</span>
+          <span class="text-[10px] uppercase font-bold text-[#7A6F68] block">Used Days</span>
+          <span class="text-sm font-extrabold text-[#B05335]">{{ selectedBalance.usedDays }}</span>
         </div>
         <div>
-          <span class="text-[10px] uppercase font-bold text-slate-400 block">Pending Days</span>
-          <span class="text-sm font-extrabold text-amber-600">{{ selectedBalance.pendingDays }}</span>
+          <span class="text-[10px] uppercase font-bold text-[#7A6F68] block">Pending Days</span>
+          <span class="text-sm font-extrabold text-[#BB6C43]">{{ selectedBalance.pendingDays }}</span>
         </div>
       </div>
 
       <form [formGroup]="adjustForm" (ngSubmit)="onSaveAdjustment()" class="space-y-4 text-xs" novalidate>
         <div>
-          <label for="new-total" class="block font-bold text-slate-700 mb-1">
-            New Total Allocation (Days) <span class="text-rose-500">*</span>
+          <label for="new-total" class="block font-bold text-[#4A413C] mb-1">
+            New Total Allocation (Days) <span class="text-[#B05335]">*</span>
           </label>
           <input
             id="new-total"
@@ -285,41 +285,41 @@
             step="0.5"
             formControlName="newTotal"
             placeholder="e.g. 15.0"
-            class="w-full px-3.5 py-2.5 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            class="w-full px-3.5 py-2.5 border rounded-xl border-[#E4DDD6] bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:outline-none transition-colors"
           />
-          <div *ngIf="adjustForm.get('newTotal')?.errors?.['minRequired']" class="text-[11px] text-rose-600 mt-1 font-semibold">
+          <div *ngIf="adjustForm.get('newTotal')?.errors?.['minRequired']" class="text-[11px] text-[#B05335] mt-1 font-semibold">
             Total allocation cannot be less than Used ({{ selectedBalance?.usedDays }}) plus Pending ({{ selectedBalance?.pendingDays }}) days.
           </div>
         </div>
 
         <div>
-          <label for="adj-reason" class="block font-bold text-slate-700 mb-1">
-            Adjustment Reason & Justification <span class="text-rose-500">*</span>
+          <label for="adj-reason" class="block font-bold text-[#4A413C] mb-1">
+            Adjustment Reason & Justification <span class="text-[#B05335]">*</span>
           </label>
           <textarea
             id="adj-reason"
             rows="3"
             formControlName="reason"
             placeholder="State the business or contractual reason for adjusting this employee's quota..."
-            class="w-full px-3.5 py-2 border rounded-xl border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+            class="w-full px-3.5 py-2 border rounded-xl border-[#E4DDD6] bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:outline-none transition-colors"
           ></textarea>
-          <div *ngIf="adjustForm.get('reason')?.invalid && (adjustForm.get('reason')?.touched || submitted)" class="text-[11px] text-rose-600 mt-1">
+          <div *ngIf="adjustForm.get('reason')?.invalid && (adjustForm.get('reason')?.touched || submitted)" class="text-[11px] text-[#B05335] mt-1">
             A descriptive adjustment reason is mandatory for organizational audit compliance.
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-[#E4DDD6]">
           <button
             type="button"
             (click)="showModal = false"
-            class="px-4 py-2 border border-slate-300 rounded-xl text-slate-700 font-semibold hover:bg-slate-50 transition-colors"
+            class="px-4 py-2 border border-[#CCB499] rounded-xl text-[#4A413C] font-semibold bg-[#FAF7F4] hover:bg-white transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             [disabled]="adjustForm.invalid || isSaving"
-            class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            class="px-5 py-2 bg-[#BB6C43] hover:bg-[#A85933] text-white font-bold rounded-xl transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             <span *ngIf="isSaving" class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
             <span>Confirm Allocation Adjustment</span>

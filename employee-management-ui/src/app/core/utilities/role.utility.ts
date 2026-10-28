@@ -1,7 +1,7 @@
 import { Role } from '../models/auth.models';
 
 /**
- * Normalizes any role representation into a strongly-typed WorkPulse Role.
+ * Normalizes any role representation into a strongly-typed EMS Role.
  * Handles prefixes like 'ROLE_', mixed casing, and whitespace.
  */
 export function normalizeRole(role: string | null | undefined): Role {

@@ -1,10 +1,10 @@
 <div class="space-y-6">
   <!-- Top Navigation & Header -->
-  <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+  <div class="flex items-center justify-between pb-4 border-b border-[#E4DDD6]">
     <div class="flex items-center gap-3">
       <a
         routerLink="/attendance"
-        class="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+        class="p-2 rounded-xl text-[#7A6F68] hover:text-[#4A413C] hover:bg-[#FAF7F4] transition-colors"
         title="Back to Attendance Center"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -12,41 +12,41 @@
         </svg>
       </a>
       <div>
-        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Attendance Logs History</h2>
-        <p class="text-xs text-slate-500 mt-0.5">Filter work hours, swipe logs, and status transitions across dates.</p>
+        <h2 class="text-xl sm:text-2xl font-bold text-[#4A413C] tracking-tight font-display">Attendance Logs History</h2>
+        <p class="text-xs text-[#7A6F68] mt-0.5">Filter work hours, swipe logs, and status transitions across dates.</p>
       </div>
     </div>
   </div>
 
   <!-- Filters Form -->
-  <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+  <div class="bg-white p-4 rounded-2xl border border-[#E4DDD6] shadow-xs">
     <form [formGroup]="filterForm" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
       <div>
-        <label for="startDate" class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Start Date</label>
+        <label for="startDate" class="block text-[11px] font-bold text-[#4A413C] uppercase mb-1">Start Date</label>
         <input
           id="startDate"
           type="date"
           formControlName="startDate"
-          class="w-full px-3.5 py-2 border rounded-xl text-xs border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+          class="w-full px-3.5 py-2 border rounded-xl text-xs border-[#E4DDD6] bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors"
         />
       </div>
 
       <div>
-        <label for="endDate" class="block text-[11px] font-bold text-slate-600 uppercase mb-1">End Date</label>
+        <label for="endDate" class="block text-[11px] font-bold text-[#4A413C] uppercase mb-1">End Date</label>
         <input
           id="endDate"
           type="date"
           formControlName="endDate"
-          class="w-full px-3.5 py-2 border rounded-xl text-xs border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+          class="w-full px-3.5 py-2 border rounded-xl text-xs border-[#E4DDD6] bg-[#FAF7F4] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors"
         />
       </div>
 
       <div>
-        <label for="status" class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Status Filter</label>
+        <label for="status" class="block text-[11px] font-bold text-[#4A413C] uppercase mb-1">Status Filter</label>
         <select
           id="status"
           formControlName="status"
-          class="w-full px-3.5 py-2 border rounded-xl text-xs bg-white border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
+          class="w-full px-3.5 py-2 border rounded-xl text-xs bg-[#FAF7F4] border-[#E4DDD6] text-[#4A413C] focus:bg-white focus:ring-2 focus:ring-[#BB6C43] focus:border-[#BB6C43] focus:outline-none transition-colors"
         >
           <option value="ALL">All Statuses</option>
           <option value="PRESENT">PRESENT</option>
@@ -59,7 +59,7 @@
   </div>
 
   <!-- History Table -->
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+  <div class="bg-white rounded-2xl border border-[#E4DDD6] shadow-xs overflow-hidden">
     <app-loading-spinner
       *ngIf="loading$ | async"
       [loading]="true"
@@ -69,7 +69,7 @@
     <div *ngIf="!(loading$ | async)" class="overflow-x-auto">
       <table class="w-full text-left text-xs border-collapse">
         <thead>
-          <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+          <tr class="table-header">
             <th class="p-3.5">Date</th>
             <th class="p-3.5">Employee</th>
             <th class="p-3.5">Check In</th>
@@ -78,13 +78,13 @@
             <th class="p-3.5">Status</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-100">
-          <tr *ngFor="let record of history$ | async" class="hover:bg-slate-50/70 transition-colors">
-            <td class="p-3.5 font-bold text-slate-900">{{ record.attendanceDate }}</td>
-            <td class="p-3.5 font-medium text-slate-800">{{ record.employeeName }}</td>
-            <td class="p-3.5 font-mono text-slate-600">{{ record.checkInTime ? (record.checkInTime | date:'shortTime') : '--:--' }}</td>
-            <td class="p-3.5 font-mono text-slate-600">{{ record.checkOutTime ? (record.checkOutTime | date:'shortTime') : '--:--' }}</td>
-            <td class="p-3.5 font-bold text-slate-800">{{ record.totalHours }} hrs</td>
+        <tbody class="divide-y divide-[#E4DDD6] text-[#5F554F]">
+          <tr *ngFor="let record of history$ | async" class="hover:bg-[#FAF7F4] transition-colors">
+            <td class="p-3.5 font-bold text-[#4A413C]">{{ record.attendanceDate }}</td>
+            <td class="p-3.5 font-medium text-[#4A413C]">{{ record.employeeName }}</td>
+            <td class="p-3.5 font-mono text-[#5F554F]">{{ record.checkInTime ? (record.checkInTime | date:'shortTime') : '--:--' }}</td>
+            <td class="p-3.5 font-mono text-[#5F554F]">{{ record.checkOutTime ? (record.checkOutTime | date:'shortTime') : '--:--' }}</td>
+            <td class="p-3.5 font-bold text-[#4A413C]">{{ record.totalHours }} hrs</td>
             <td class="p-3.5">
               <app-status-badge [status]="record.status"></app-status-badge>
             </td>
@@ -92,22 +92,22 @@
         </tbody>
       </table>
 
-      <div *ngIf="((history$ | async)?.length || 0) === 0" class="p-10 text-center text-slate-400">
+      <div *ngIf="((history$ | async)?.length || 0) === 0" class="p-10 text-center text-[#7A6F68]">
         No attendance records found for selected period.
       </div>
 
       <!-- Pagination Bar -->
-      <div class="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 bg-slate-50/50">
+      <div class="p-4 border-t border-[#E4DDD6] flex items-center justify-between text-xs text-[#7A6F68] bg-[#FAF7F4]">
         <span>
-          Showing Page <strong class="text-slate-800">{{ currentPage + 1 }}</strong> of <strong class="text-slate-800">{{ (totalPages$ | async) || 1 }}</strong>
-          &bull; Total Records: <strong class="text-slate-800">{{ totalElements$ | async }}</strong>
+          Showing Page <strong class="text-[#4A413C]">{{ currentPage + 1 }}</strong> of <strong class="text-[#4A413C]">{{ (totalPages$ | async) || 1 }}</strong>
+          &bull; Total Records: <strong class="text-[#4A413C]">{{ totalElements$ | async }}</strong>
         </span>
         <div class="flex items-center gap-2">
           <button
             type="button"
             [disabled]="currentPage === 0"
             (click)="onPrevPage()"
-            class="px-3.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium text-slate-700"
+            class="px-3.5 py-1.5 rounded-lg border border-[#CCB499] bg-white hover:bg-[#FAF7F4] disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium text-[#4A413C]"
           >
             Previous
           </button>
@@ -115,7 +115,7 @@
             type="button"
             [disabled]="(currentPage + 1) >= ((totalPages$ | async) || 1)"
             (click)="onNextPage()"
-            class="px-3.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium text-slate-700"
+            class="px-3.5 py-1.5 rounded-lg border border-[#CCB499] bg-white hover:bg-[#FAF7F4] disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-medium text-[#4A413C]"
           >
             Next
           </button>

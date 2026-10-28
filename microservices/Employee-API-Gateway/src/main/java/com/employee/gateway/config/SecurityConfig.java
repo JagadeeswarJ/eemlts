@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -19,12 +20,13 @@ public class SecurityConfig {
     private final GatewayJwtSecurityContextRepository securityContextRepository;
     private final ReactiveAuthenticationEntryPoint authenticationEntryPoint;
     private final ReactiveAccessDeniedHandler accessDeniedHandler;
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .cors(ServerHttpSecurity.CorsSpec::disable)
+                .cors(corsSpec -> corsSpec.configurationSource(corsConfigurationSource))
                 .securityContextRepository(securityContextRepository)
                 .exceptionHandling(exceptionHandlingSpec ->
                         exceptionHandlingSpec

@@ -6,9 +6,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   if (typeof window !== 'undefined') {
     const token = localStorage.getItem('emp_access_token');
-    const userProfile = localStorage.getItem('emp_user_profile');
-
-    if (token && userProfile) {
+    if (token) {
       return true;
     }
   }

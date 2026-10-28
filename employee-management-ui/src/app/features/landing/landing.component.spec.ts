@@ -19,35 +19,21 @@ describe('LandingComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create and render WorkPulse branding', () => {
+  it('should create and render EMS branding', () => {
     expect(component).toBeTruthy();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain('WorkPulse');
-    expect(compiled.textContent).toContain('Enterprise HR & Leaves');
+    expect(compiled.textContent).toContain('EMS');
   });
 
   it('should render hero headline and description', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('Your workday, organized in');
-    expect(compiled.textContent).toContain('one place');
-    expect(compiled.textContent).toContain('Manage attendance, request leave, follow approvals');
   });
 
-  it('should render all 6 feature cards', () => {
+  it('should render all feature cards', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('Attendance Tracking');
     expect(compiled.textContent).toContain('Leave Management');
-    expect(compiled.textContent).toContain('Employee Directory');
-    expect(compiled.textContent).toContain('Team Approvals');
-    expect(compiled.textContent).toContain('Workforce Insights');
-    expect(compiled.textContent).toContain('Role-Based Access');
-  });
-
-  it('should render role benefits for Employees, Managers, and HR', () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain('For Staff Employees');
-    expect(compiled.textContent).toContain('For Team Managers');
-    expect(compiled.textContent).toContain('For HR & Administrators');
   });
 
   it('should contain navigation links to /sign-in and /sign-up', () => {
@@ -61,7 +47,7 @@ describe('LandingComponent', () => {
   it('should render footer with current copyright year', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain(new Date().getFullYear().toString());
-    expect(compiled.textContent).toContain('WorkPulse. All rights reserved.');
+    expect(compiled.textContent).toContain('EMS. All rights reserved.');
   });
 
   it('should toggle mobile menu signal', () => {

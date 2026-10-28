@@ -1,8 +1,8 @@
-# WorkPulse - PRD Requirement Traceability Matrix
+# EMS - PRD Requirement Traceability Matrix
 
 ## 1. Scope & Traceability Overview
 
-This document provides a concise requirement-to-implementation traceability matrix for the **WorkPulse Employee Management & Leave Tracking System**. Every functional and security requirement is mapped directly to its authoritative backend REST endpoint, Angular frontend route, role-based authorization policy, automated test verification evidence, and operational status.
+This document provides a concise requirement-to-implementation traceability matrix for the **EMS Employee Management & Leave Tracking System**. Every functional and security requirement is mapped directly to its authoritative backend REST endpoint, Angular frontend route, role-based authorization policy, automated test verification evidence, and operational status.
 
 ### Explicitly Excluded Per Architectural Directives
 - **Git / GitHub:** Excluded by project mandate.

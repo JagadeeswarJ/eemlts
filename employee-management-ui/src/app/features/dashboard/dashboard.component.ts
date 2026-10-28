@@ -42,7 +42,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   currentUser$ = this.store.select(selectCurrentUser);
   userRole: Role = 'EMPLOYEE';
 
-  // Isolated Dashboard Data
   employeeDashboard$ = this.store.select(selectEmployeeDashboard);
   employeeLoading$ = this.store.select(selectEmployeeDashboardLoading);
   employeeError$ = this.store.select(selectEmployeeDashboardError);
@@ -61,7 +60,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private hasInitializedData = false;
 
   ngOnInit(): void {
-    // Only dispatch role-appropriate dashboard calls once the authenticated user role is resolved
     this.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
       if (user && !this.hasInitializedData) {
         this.hasInitializedData = true;
@@ -76,24 +74,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  /**
-   * Dispatches only the dashboard actions strictly permitted for the verified user role.
-   * EMPLOYEE: Only personal attendance & employee-dashboard.
-   * MANAGER: Personal attendance, employee-dashboard, and manager-dashboard.
-   * HR & ADMIN: Full organizational datasets.
-   */
   private initializeRoleDashboard(role: Role): void {
-    // Every authenticated user is entitled to their own attendance log & personal dashboard
     this.store.dispatch(loadTodayAttendance({}));
     this.store.dispatch(loadEmployeeDashboard());
 
     if (role === 'EMPLOYEE') {
       this.activeTab = 'employee';
-      // Deliberately DO NOT call loadManagerDashboard() or loadHrDashboard()
     } else if (role === 'MANAGER') {
       this.activeTab = 'manager';
       this.store.dispatch(loadManagerDashboard());
-      // Deliberately DO NOT call loadHrDashboard()
     } else if (role === 'HR' || role === 'ADMIN') {
       this.activeTab = 'hr';
       this.store.dispatch(loadManagerDashboard());
@@ -144,13 +133,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   getBalanceBorder(code: string): string {
     switch (code) {
       case 'CASUAL':
-        return 'border-blue-500';
+        return 'border-[#BB6C43]';
       case 'SICK':
-        return 'border-rose-500';
+        return 'border-[#C8906D]';
       case 'EARNED':
-        return 'border-emerald-500';
+        return 'border-[#2F6848]';
       default:
-        return 'border-slate-400';
+        return 'border-[#CCB499]';
     }
   }
 }

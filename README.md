@@ -1,58 +1,38 @@
-# WorkPulse - Enterprise Employee Management & Leave Tracking System
+# EMS — Enterprise Human Capital & Leave System
 
-An enterprise-grade, reactive microservices human capital management and leave tracking platform architected with **Java 17, Spring Boot 4.x, Spring WebFlux, Spring Cloud Gateway, Netflix Eureka, R2DBC MySQL, Angular 21, NgRx, Tailwind CSS 4, and Vitest**.
-
----
-
-## 1. Overview & PRD Scope
-
-WorkPulse provides an end-to-end organizational governance and self-service platform for enterprise workforces. The system enforces strict organizational role boundaries, automated daily attendance calculation, leave entitlement management with immutable audit logs, real-time KPI intelligence, and role-scoped access control.
-
-### Implemented PRD Scope:
-- **Service Discovery & Routing:** Eureka service registry and Spring Cloud Gateway with coordinated 5-second circuit breakers.
-- **Security & RBAC:** Stateful JWT session issued via HttpOnly cookies, verified and stripped at Gateway, and propagated downstream via trusted internal security headers (`X-User-Id`, `X-User-Role`, `X-User-Email`, `X-Employee-Id`).
-- **Department Administration:** Complete CRUD for organizational business units, leadership assignments, active/inactive filtering, and deactivation conflict checks (`/departments`).
-- **Employee Lifecycle:** Directory filtering, HR provisioning, role assignment, and automatic quota allocation (`/employees`).
-- **Secure Self-Service Profile:** Authenticated employees can manage personal contact details while sensitive employment data remains read-only (`/profile`).
-- **Attendance Management:** Daily check-in/out, biometric punch simulation, automated hours calculation, and auditable correction workflows (`/attendance`).
-- **Leave Policy Configuration:** Administrative leave-type creation, yearly quotas, carry-forward rules, and activation toggling (`/leave-configuration`).
-- **Leave Allocation Governance:** Administrative quota adjustment with mandatory business justification and immutable audit logging (`/leave-configuration/allocations`).
-- **Role-Scoped Balances:** Server-side IDOR prevention ensuring employees view only personal balances, managers view only direct reports, and HR/Admin view organization-wide data (`/leaves`).
-- **Auditable Decision Workflows:** Mandatory rejection justification, approver tracking, self-approval prevention, and transactional quota deduction.
-- **Reporting Analytics:** Personalized dashboards and KPI metrics for Employee, Manager, and HR roles (`/dashboard`, `/reports`).
+An enterprise-grade, reactive microservices human capital management and leave tracking platform architected with **Java 17, Spring Boot 4.x, Spring WebFlux, Spring Cloud Gateway, Netflix Eureka, R2DBC MySQL, Angular 21, NgRx, Tailwind CSS 4, and Playwright**.
 
 ---
 
-## 2. Technology Stack & Versions
+## 1. Executive Overview & Brand Identity
 
-- **Java Development Kit (JDK):** OpenJDK 17
-- **Backend Framework:** Spring Boot 4.1.1 (Reactive WebFlux, Spring Security, Spring Data R2DBC)
-- **Service Discovery:** Spring Cloud Netflix Eureka Server 2024.0.0
-- **API Gateway:** Spring Cloud Gateway 2024.0.0 with Resilience4j
-- **Database Engine:** MySQL 8.x with R2DBC MySQL reactive driver
-- **Frontend Framework:** Angular 21.2.17 (Standalone architecture)
-- **State Management:** NgRx 21.1.1 (Store, Effects, Selectors)
-- **CSS Framework:** Tailwind CSS 4.1.12
-- **Testing Suites:** JUnit 5, Mockito, Reactor Test (`StepVerifier`), Vitest 4.0.8, `@vitest/coverage-v8`
-- **Node.js & npm:** Node 24.13.0, npm 11.6.2
+**EMS** delivers a unified, high-reliability workspace for modern enterprise organizations. It features automated daily attendance calculations, biometric punch simulation, auditable leave configuration and approvals with immutable audit trails, role-tailored KPI intelligence, and granular role-based access control.
+
+### Amber Walnut Morning Design System
+EMS is styled exclusively in the **Amber Walnut Morning** aesthetic, ensuring executive calm, high readability, and crisp contrast without visual noise:
+- **Canvas / Background (`#EBEFEE`):** Crisp, calm morning mist background.
+- **Warm Sand (`#CCB499`):** Subtle borders, badges, card accents, and secondary text.
+- **Muted Terracotta (`#C8906D`):** Warm structural highlights, pending states, and intermediate badges.
+- **Burnt Amber (`#BB6C43`):** Primary action buttons, active navigation indicators, and key focus states.
+- **Dark Walnut (`#4A413C` / `#3E3530`):** Deep earthy text, executive hero headers, and solid sidebar navigation.
+- **Zero Icon Packages & Zero Emojis:** Strictly no third-party icon libraries (FontAwesome, Lucide, Material) and zero emojis anywhere. 100% semantic inline SVG primitives and typography.
 
 ---
 
-## 3. Architecture & Service Port Registry
+## 2. Architecture & Service Port Registry
 
 ```
                                   +------------------------------------+
-                                  |   Angular 21 Client Application    |
+                                  |      EMS Angular 21 Client         |
                                   |    (employee-management-ui:4200)   |
                                   +-----------------+------------------+
-                                                    |
-                                          HTTP / CORS with Cookie
+                                                    | HTTP / CORS with HttpOnly Cookie
                                                     v
                                   +------------------------------------+
                                   |    Spring Cloud API Gateway        |
                                   |    (Employee-API-Gateway:8080)     |
                                   +-----------------+------------------+
-                                                    |
+                                                    | Internal Routing via Eureka & Security Headers
             +----------------------+----------------+----------------------+----------------------+
             |                      |                                       |                      |
             v                      v                                       v                      v
@@ -60,238 +40,227 @@ WorkPulse provides an end-to-end organizational governance and self-service plat
 |  Employee-Management  | | Attendance-Management |       |   Leave-Management    | |  Reporting-Dashboard  |
 |     Service:8081      | |     Service:8082      |       |     Service:8083      | |     Service:8084      |
 +-----------+-----------+ +-----------+-----------+       +-----------+-----------+ +-----------+-----------+
-            |                         |                               |                         |
-            +-------------------------+-------------------------------+-------------------------+
-                                      | R2DBC Reactive MySQL Driver
-                                      v
-                        +---------------------------+
-                        |  MySQL Database (Port 3306)
-                        |  employee_management_db   |
-                        +---------------------------+
+            \                      |                                       |                     /
+             \                     |                                       |                    /
+              +--------------------+-------------------+-------------------+-------------------+
+                                                       |
+                                                       v
+                                            +---------------------+
+                                            |   MySQL 8.0 R2DBC   |
+                                            |  (employee_mgmt_db) |
+                                            |     (Port 3306)     |
+                                            +---------------------+
 ```
+
+### Microservice Registry
 
 | Service Name | Port | Directory Path | Core Responsibilities |
 |---|---|---|---|
-| **Employee-Service-Registry** | **8761** | `C:\Users\CM13500\Employee-Service-Registry` | Eureka Service Registry and discovery server |
-| **Employee-API-Gateway** | **8080** | `C:\Users\CM13500\Employee-API-Gateway` | API Gateway, JWT verification, header stripping, circuit breakers |
-| **Employee-Management-Service** | **8081** | `C:\Users\CM13500\Employee-Management-Service` | Authentication, Employee lifecycle, Department administration, Self-profile |
-| **Attendance-Management-Service** | **8082** | `C:\Users\CM13500\Attendance-Management-Service` | Daily punch, work hours calculation, attendance corrections, audit trail |
-| **Leave-Management-Service** | **8083** | `C:\Users\CM13500\Leave-Management-Service` | Leave policies, quotas, balance allocation, approvals, team calendar |
-| **Reporting-Dashboard-Service** | **8084** | `C:\Users\CM13500\Reporting-Dashboard-Service` | KPI metrics, aggregated employee/manager/HR dashboard analytics |
-| **Frontend UI** | **4200** | `C:\Users\CM13500\AngularProjects\employee-management-ui` | Angular 21 Single Page Application, NgRx Store, Tailwind CSS |
+| **Employee-Service-Registry** | **8761** | `microservices/Employee-Service-Registry` | Eureka Service Registry and discovery server |
+| **Employee-API-Gateway** | **8080** | `microservices/Employee-API-Gateway` | Central API Gateway, JWT verification, security header injection, circuit breakers, CORS |
+| **Employee-Management-Service** | **8081** | `microservices/Employee-Management-Service` | Authentication, Employee lifecycle, Department administration, Self-profile |
+| **Attendance-Management-Service** | **8082** | `microservices/Attendance-Management-Service` | Biometric clock-in/out simulation, work hours calculation, attendance regularization, audit logs |
+| **Leave-Management-Service** | **8083** | `microservices/Leave-Management-Service` | Leave policies, quotas, balance allocation, approvals, team calendar |
+| **Reporting-Dashboard-Service** | **8084** | `microservices/Reporting-Dashboard-Service` | Role-tailored KPI intelligence (Employee, Manager, HR dashboards) |
+| **EMS Frontend UI** | **4200** | `employee-management-ui` | Angular 21 SPA, NgRx Store, Tailwind CSS 4, Amber Walnut Morning theme |
+| **Playwright Test Suite** | N/A | `PLAYWRIGHT` | Chromium automated E2E test suite (16 tests, 100% pass) |
 
 ---
 
-## 4. Security & Role-Based Access Control (RBAC)
+## 3. Single-Source Database Configuration
+
+All microservices that persist data (`Employee-Management-Service`, `Attendance-Management-Service`, `Leave-Management-Service`, `Reporting-Dashboard-Service`) import their database credentials and R2DBC parameters from a **single source of truth**:
+
+📂 **`microservices/database.yml`**:
+```yaml
+spring:
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/employee_management_db
+    username: root
+    password: ${DB_PASSWORD:root}
+    pool:
+      initial-size: 5
+      max-size: 20
+      max-idle-time: 30m
+```
+
+Each microservice's `src/main/resources/application.yml` automatically imports this shared file:
+```yaml
+spring:
+  config:
+    import:
+      - "optional:file:../database.yml"
+      - "optional:file:./microservices/database.yml"
+      - "optional:file:./database.yml"
+```
+*Changing the database host, port, username, or password in `microservices/database.yml` immediately updates all microservices without modifying individual service configurations.*
+
+---
+
+## 4. Backend Lifecycle Batch Utilities
+
+Windows CLI batch utilities are provided in `microservices/` for automated management:
+
+| Utility Script | Description |
+|---|---|
+| **`microservices\0-delete-targets.bat`** | Force-deletes all Maven `target` folders across all microservices. Pass `--no-pause` for automated scripts. |
+| **`microservices\0-rebuild-jars.bat`** | Clean packages all 6 microservices sequentially with Maven (`mvn clean package -DskipTests`). Pass `--no-pause` for CI/CD. |
+| **`microservices\2-start-all-services.bat`** | Launches all 6 microservices in parallel, initializing Eureka first, redirecting logs to `microservices/runtime-logs/`. |
+| **`microservices\3-stop-all-services.bat`** | Scans listening ports (`8761`, `8080`, `8081`, `8082`, `8083`, `8084`) and terminates processes cleanly. |
+
+---
+
+## 5. Security & Role-Based Access Control (RBAC)
 
 ### Trusted-Header Security Architecture
-1. **Client to Gateway:** The Angular application transmits authentication credentials via an `HttpOnly` cookie or Bearer token.
-2. **Gateway Ingress:** Gateway filters strip any incoming `X-User-*` headers from external clients to prevent spoofing.
-3. **Gateway JWT Validation:** The Gateway validates the JWT signature, extracts user claims, and injects trusted internal headers:
-   - `X-User-Id`: User account identifier
-   - `X-User-Role`: Granted authority (`ADMIN`, `HR`, `MANAGER`, `EMPLOYEE`)
-   - `X-User-Email`: User principal email
-   - `X-Employee-Id`: Associated employee record identifier
-4. **Downstream Services:** Microservices trust only headers injected by the Gateway and construct a `RequestUser` security principal for method-level authorization (`@PreAuthorize`).
+1. **Edge Authentication:** Users authenticate via `POST /api/v1/auth/login`. On verification, a signed JWT is issued in an `HttpOnly`, `SameSite=Lax`, `Secure` cookie named `AUTH-TOKEN` and returned in the JSON payload.
+2. **Gateway Ingress:** `GatewayJwtSecurityContextRepository` strips untrusted client headers and verifies the JWT signature.
+3. **Trusted Header Propagation:** The Gateway injects verified internal headers for downstream consumption:
+   - `X-User-Id`: Authenticated user primary key
+   - `X-User-Role`: User role (`ADMIN`, `HR`, `MANAGER`, `EMPLOYEE`)
+   - `X-User-Email`: Authenticated user email address
+   - `X-Employee-Id`: Linked employee record identifier
+   - `X-Correlation-Id`: Distributed tracing request UUID
+4. **Downstream Microservices:** Domain services trust only internal headers injected by the Gateway, preventing IDOR and external spoofing.
+5. **CORS Architecture:** Gateway exposes a dedicated `CorsConfigurationSource` covering `http://localhost:4200` with full methods (`GET`, `POST`, `PUT`, `DELETE`, `PATCH`, `OPTIONS`), allowed headers (`*`), and credentials enabled (`allowCredentials: true`).
 
 ### RBAC Permission Matrix
 
 | Feature / Resource | EMPLOYEE | MANAGER | HR | ADMIN |
-|---|---|---|---|---|
-| View Personal Dashboard & Balances | Allowed | Allowed | Allowed | Allowed |
-| Daily Check-in / Check-out | Allowed | Allowed | Allowed | Allowed |
+|---|:---:|:---:|:---:|:---:|
+| Personal Dashboard & Balances | Allowed | Allowed | Allowed | Allowed |
+| Daily Clock-in / Clock-out | Allowed | Allowed | Allowed | Allowed |
 | Apply for Personal Leave | Allowed | Allowed | Allowed | Allowed |
-| Request Personal Attendance Correction | Allowed | Allowed | Allowed | Allowed |
+| Request Attendance Correction | Allowed | Allowed | Allowed | Allowed |
 | Update Personal Contact Profile | Allowed | Allowed | Allowed | Allowed |
 | View Direct Report Balances & Calendar | Denied | Allowed | Allowed | Allowed |
 | Approve Direct Report Leaves & Corrections | Denied | Allowed | Allowed | Allowed |
 | Department Administration | Denied | Denied | Full Access | Full Access |
 | Leave-Type Configuration | Denied | Denied | Full Access | Full Access |
-| Employee Quota Allocation & Adjustment | Denied | Denied | Full Access | Full Access |
-| Employee Lifecycle Onboarding & Deactivation | Denied | Denied | Full Access | Full Access |
+| Quota Allocation & Adjustment | Denied | Denied | Full Access | Full Access |
+| Employee Lifecycle Onboarding & Offboarding | Denied | Denied | Full Access | Full Access |
 | Organization-Wide Reports & Analytics | Denied | Denied | Full Access | Full Access |
 
 ---
 
-## 5. Angular Frontend Routes & Architecture
+## 6. Angular Frontend Architecture
 
-All Angular components strictly observe the mandatory **4-file component architecture** (`.ts`, `.html`, `.css`, `.spec.ts`).
+The frontend is built on **Angular 21** using standalone components, reactive signals, and **NgRx** centralized state management.
 
-| Route | Component | Guard / Access | Description |
+### Key Route Inventory
+| Route | Component | Access / Guard | Description |
 |---|---|---|---|
-| `/` | `LandingComponent` | Public | Landing page with product overview and demo quick-access |
-| `/sign-in` | `SignInComponent` | `publicAuthGuard` | User login with demo credential quick-fill |
-| `/auth/account-access` | `SignUpComponent` | `publicAuthGuard` | Enterprise account provisioning guidance page |
-| `/auth/forgot-password` | `ForgotPasswordComponent` | `publicAuthGuard` | Self-service password reset simulation |
-| `/dashboard` | `DashboardComponent` | `authGuard` | Role-adaptive dashboard (Employee / Manager / HR views) |
+| `/` | `LandingComponent` | Public (`publicAuthGuard`) | EMS marketing landing page |
+| `/sign-in` | `SignInComponent` | Public (`publicAuthGuard`) | Secure sign-in form with quick demo access |
+| `/sign-up` | `SignUpComponent` | Public (`publicAuthGuard`) | Enterprise account guidance |
+| `/forgot-password` | `ForgotPasswordComponent` | Public (`publicAuthGuard`) | Password recovery flow |
+| `/dashboard` | `DashboardComponent` | `authGuard` | Role-adaptive dashboard (Employee / Manager / HR) |
 | `/employees` | `EmployeeListComponent` | `roleGuard(['ADMIN', 'HR', 'MANAGER'])` | Filterable employee directory |
-| `/employees/new` | `EmployeeFormComponent` | `roleGuard(['ADMIN', 'HR'])` | HR employee onboarding form |
-| `/employees/:id` | `EmployeeDetailComponent` | `authGuard` | Detailed employee employment card |
-| `/employees/:id/edit` | `EmployeeFormComponent` | `roleGuard(['ADMIN', 'HR'])` | Edit employee employment details |
-| `/departments` | `DepartmentsComponent` | `roleGuard(['ADMIN', 'HR'])` | Department CRUD, active filtering, leadership assignment |
-| `/leave-configuration` | `LeaveConfigurationComponent` | `roleGuard(['ADMIN', 'HR'])` | Leave policy types, annual quotas, carry-forward settings |
-| `/leave-configuration/allocations`| `LeaveAllocationsComponent`| `roleGuard(['ADMIN', 'HR'])` | Employee quota adjustments and immutable audit history |
-| `/attendance` | `AttendanceDashboardComponent` | `authGuard` | Daily attendance punch and status |
-| `/attendance/history` | `AttendanceHistoryComponent` | `authGuard` | Monthly attendance logs and records |
-| `/attendance/corrections` | `AttendanceCorrectionsComponent` | `authGuard` | Submit and review attendance corrections |
-| `/leaves` | `LeaveDashboardComponent` | `authGuard` | Leave balances, application drawer, and history |
-| `/leaves/approvals` | `ApprovalQueueComponent` | `roleGuard(['ADMIN', 'HR', 'MANAGER'])` | Review pending leave requests |
+| `/employees/new` | `EmployeeFormComponent` | `roleGuard(['ADMIN', 'HR'])` | HR employee onboarding |
+| `/employees/:id` | `EmployeeDetailComponent` | `authGuard` | Personnel dossier and employment details |
+| `/employees/:id/edit` | `EmployeeFormComponent` | `roleGuard(['ADMIN', 'HR'])` | Edit employee profile |
+| `/departments` | `DepartmentsComponent` | `roleGuard(['ADMIN', 'HR'])` | Department CRUD and leadership assignment |
+| `/leave-configuration` | `LeaveConfigurationComponent` | `roleGuard(['ADMIN', 'HR'])` | Policy quotas and carry-forward rules |
+| `/leave-configuration/allocations` | `LeaveAllocationsComponent` | `roleGuard(['ADMIN', 'HR'])` | Quota allocation adjustments & audit logs |
+| `/attendance` | `AttendanceDashboardComponent` | `authGuard` | Biometric punch simulation & daily hours |
+| `/attendance/history` | `AttendanceHistoryComponent` | `authGuard` | Attendance historical records |
+| `/attendance/corrections` | `AttendanceCorrectionsComponent` | `authGuard` | Attendance regularization requests |
+| `/leaves` | `LeaveDashboardComponent` | `authGuard` | Leave portal, quota balances, application modal |
+| `/leaves/apply` | `LeaveApplicationComponent` | `authGuard` | Standalone leave application form |
+| `/leaves/history` | `LeaveHistoryComponent` | `authGuard` | Time-off application history & status |
+| `/leaves/approvals` | `ApprovalQueueComponent` | `roleGuard(['ADMIN', 'HR', 'MANAGER'])` | Manager & HR approval queue |
 | `/leaves/calendar` | `TeamCalendarComponent` | `authGuard` | Department team leave schedule |
-| `/reports` | `ReportsComponent` | `roleGuard(['ADMIN', 'HR', 'MANAGER'])` | Attendance and leave analytics |
-| `/profile` | `ProfileComponent` | `authGuard` | Self-service contact update & password change |
+| `/reports` | `ReportsComponent` | `roleGuard(['ADMIN', 'HR', 'MANAGER'])` | Organization analytics & workforce reports |
+| `/profile` | `ProfileComponent` | `authGuard` | Contact information update & password change |
+| `/unauthorized` | `UnauthorizedComponent` | Public | 403 Access Restricted view |
+| `**` | `NotFoundComponent` | Public | 404 Page Not Found view |
 
 ---
 
-## 6. Database Setup & Schema
+## 7. Automated Playwright Test Suite
 
-Ensure MySQL 8.x is running on localhost:3306. Execute the following standard safe commands:
+The repository includes a complete end-to-end Playwright test suite located in `PLAYWRIGHT/tests/`:
 
-```powershell
-# Create database and apply DDL schema
-mysql -u root -e "CREATE DATABASE IF NOT EXISTS employee_management_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-mysql -u root employee_management_db < "C:\Users\CM13500\database\schema.sql"
+### Test Coverage Summary (16 Tests — 100% Passing)
+- **`tests/auth.spec.ts` (5 tests):**
+  - Landing page loads with EMS branding and navigation to Sign-In
+  - Sign-in form validation displays errors on empty / invalid inputs
+  - Admin logs in and navigates to Admin Dashboard
+  - Alex Jones (Employee) logs in and sees Employee View
+  - Logout clears session and redirects back to sign-in
+- **`tests/attendance.spec.ts` (3 tests):**
+  - Employee navigates to Attendance Dashboard and views today status
+  - Employee inspects attendance history records
+  - Employee opens and inspects attendance corrections workflow
+- **`tests/leave.spec.ts` (3 tests):**
+  - Employee inspects leave balances and annual quotas
+  - Employee navigates to leave application form
+  - Manager David Miller inspects pending leave approvals queue
+- **`tests/navigation.spec.ts` (3 tests):**
+  - Unauthenticated user cannot access protected `/dashboard`
+  - Employee accessing administrative route (`/departments`) gets redirected to `/unauthorized`
+  - Admin user navigates through administrative modules (`/departments`, `/employees`, `/reports`)
+- **`tests/profile-and-reports.spec.ts` (2 tests):**
+  - User views personal profile and contact information
+  - Manager accesses organization analytics and reports dashboard
 
-# Apply initial seed data
-mysql -u root employee_management_db < "C:\Users\CM13500\database\seed.sql"
+```bash
+cd PLAYWRIGHT
+npx playwright test
 ```
 
-### Key Database Tables:
-1. `users`: Credentials, BCrypt password hashes, account status, roles.
-2. `departments`: Business unit name, code, leadership manager ID, `is_active` status.
-3. `employees`: Profiles, contact details, department, manager, employment status.
-4. `attendance_records`: Date, daily check-in time, check-out time, total working hours, status.
-5. `attendance_audit_logs`: Audit logs for check-in/out and correction decisions.
-6. `leave_types`: Policy code, name, description, annual quota, carry-forward flag, `is_active` status.
-7. `leave_balances`: Yearly quota allocations, used days, pending days, available days.
-8. `leave_requests`: Leave applications, date ranges, reasons, status, decision notes.
-9. `leave_balance_adjustments`: Immutable audit trail for administrative allocation adjustments.
+---
+
+## 8. Verified Demo Accounts & Credentials
+
+Default password for all seed accounts: **`Password123!`**
+
+| Name | Work Email | Role | Department | Key Capabilities |
+|---|---|---|---|---|
+| **John Admin** | `admin@company.com` | `ADMIN` | Human Resources | Full organizational administration, departments, allocations, reports |
+| **Sarah Jenkins** | `hr@company.com` | `HR` | Human Resources | Employee directory, leave configuration, quota adjustments |
+| **David Miller** | `manager@company.com` | `MANAGER` | Engineering | Direct report approvals, team calendar, manager dashboard |
+| **Alex Jones** | `alex.jones@company.com` | `EMPLOYEE` | Engineering | Clock in/out, leave application, personal profile editing |
+| **Sarah Smith** | `sarah.smith@company.com` | `EMPLOYEE` | Engineering | Daily attendance tracking, time-off requests |
 
 ---
 
-## 7. Standard Safe Startup & Shutdown Instructions
+## 9. Quickstart Guide
 
-### Startup Order (Strictly Follow Sequential Order):
-1. **MySQL Server 8.x** (Port 3306)
-2. **Employee-Service-Registry** (Port 8761) - Wait until Eureka is UP
-3. **Employee-Management-Service** (Port 8081)
-4. **Attendance-Management-Service** (Port 8082)
-5. **Leave-Management-Service** (Port 8083)
-6. **Reporting-Dashboard-Service** (Port 8084)
-7. **Employee-API-Gateway** (Port 8080)
-8. **Angular Frontend** (Port 4200)
+### Prerequisites
+- Java 17 (JDK)
+- MySQL 8.x running on port `3306` (service `MySQL80`, user `root`, password `root`)
+- Node.js 20+ and npm
 
-### Safe Startup Commands:
-```powershell
-# 1. Registry
-cd C:\Users\CM13500\Employee-Service-Registry
-mvn spring-boot:run
+### Step 1: Database Setup
+```cmd
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -proot -e "CREATE DATABASE IF NOT EXISTS employee_management_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -proot employee_management_db < database\schema.sql
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -proot employee_management_db < database\seed.sql
+```
 
-# 2. Employee Service
-cd C:\Users\CM13500\Employee-Management-Service
-mvn spring-boot:run
+### Step 2: Build & Start Microservices
+```cmd
+microservices\0-rebuild-jars.bat --no-pause
+microservices\2-start-all-services.bat --no-pause
+```
+*All 6 microservices will launch in parallel, automatically reading `microservices/database.yml`.*
 
-# 3. Attendance Service
-cd C:\Users\CM13500\Attendance-Management-Service
-mvn spring-boot:run
-
-# 4. Leave Service
-cd C:\Users\CM13500\Leave-Management-Service
-mvn spring-boot:run
-
-# 5. Reporting Service
-cd C:\Users\CM13500\Reporting-Dashboard-Service
-mvn spring-boot:run
-
-# 6. Gateway
-cd C:\Users\CM13500\Employee-API-Gateway
-mvn spring-boot:run
-
-# 7. Frontend
-cd C:\Users\CM13500\AngularProjects\employee-management-ui
+### Step 3: Start EMS Frontend
+```cmd
+cd employee-management-ui
+npm install
 npm start
 ```
+*Frontend will be accessible at `http://localhost:4200`.*
 
-### Safe Shutdown:
-To terminate processes safely, press `Ctrl + C` in each terminal window. Do not force-terminate system processes.
-
----
-
-## 8. Build, Test, and Coverage Verification
-
-### Backend Verification:
-Run standard Maven clean test commands in each service:
-```powershell
-# Employee Service
-cd C:\Users\CM13500\Employee-Management-Service
-mvn clean test
-
-# Leave Service
-cd C:\Users\CM13500\Leave-Management-Service
-mvn clean test
-
-# Attendance Service
-cd C:\Users\CM13500\Attendance-Management-Service
-mvn clean test
+### Step 4: Run Playwright E2E Tests
+```cmd
+cd PLAYWRIGHT
+npx playwright test
 ```
 
-### Frontend Verification:
-```powershell
-cd C:\Users\CM13500\AngularProjects\employee-management-ui
-
-# Run full Vitest test suite (80 test files, 283 tests)
-npm test
-
-# Run code coverage report
-npx ng test --coverage
-
-# Run production build
-npm run build
+### Step 5: Stop Services Cleanly
+```cmd
+microservices\3-stop-all-services.bat --no-pause
 ```
-
----
-
-## 9. Test Results & Metrics Summary
-
-- **Backend Test Pass Rate:** **100%**
-  - `Employee-Management-Service`: 19 tests executed, 0 failures, 0 errors
-  - `Leave-Management-Service`: 12 tests executed, 0 failures, 0 errors
-  - `Attendance-Management-Service`: 11 tests executed, 0 failures, 0 errors
-- **Frontend Test Pass Rate:** **100%** (80 test files passed, 283 tests passed)
-- **Frontend Statement Coverage:** 76.94%
-- **Frontend Branch Coverage:** 65.66%
-- **Frontend Line Coverage:** 79.14%
-- **Frontend Function Coverage:** 48.19%
-- **Production Build:** Success (`472.12 kB` raw, `125.87 kB` estimated transfer size)
-
----
-
-## 10. Demo Accounts & Credentials
-
-Default password for all demo accounts: **`Password123!`**
-
-| User Name | Email | Role | Department | Key Capabilities |
-|---|---|---|---|---|
-| **John Admin** | `admin@company.com` | `ADMIN` | Human Resources | Full system administration, departments, allocations, reports |
-| **Sarah Jenkins** | `hr@company.com` | `HR` | Human Resources | Employee directory, leave configuration, quota adjustments |
-| **David Miller** | `manager@company.com` | `MANAGER` | Engineering | Team calendar, direct report approvals, manager dashboard |
-| **Alex Jones** | `alex.jones@company.com` | `EMPLOYEE` | Engineering | Punch in/out, leave application, personal profile editing |
-| **Sarah Smith** | `sarah.smith@company.com` | `EMPLOYEE` | Engineering | Attendance tracking, time-off requests |
-
----
-
-## 11. Delivery Package Contents
-
-The final delivery ZIP archive `WorkPulse-Final-Delivery.zip` contains:
-- `Employee-Service-Registry/` (Discovery Server source)
-- `Employee-API-Gateway/` (API Gateway & Security source)
-- `Employee-Management-Service/` (Employee & Department domain service)
-- `Attendance-Management-Service/` (Attendance tracking domain service)
-- `Leave-Management-Service/` (Leave & Allocation domain service)
-- `Reporting-Dashboard-Service/` (Analytics & KPI domain service)
-- `employee-management-ui/` (Angular 21 frontend source with 80/80 spec correspondence)
-- `database/` (`schema.sql` and `seed.sql`)
-- `README.md` (System architectural and operational setup guide)
-- `PRD-TRACEABILITY.md` (Traceability matrix)
-- `openapi.json` (OpenAPI 3.0 specification)
-- `Employee-Management-System.postman_collection.json` (Postman API collection)
-*(Generated build artifacts such as `target/`, `node_modules/`, `dist/`, `.git`, and sensitive credentials have been strictly excluded).*
